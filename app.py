@@ -4,8 +4,13 @@ import pandas as pd
 import datetime
 from serpapi_integration import fetch_flight_prices
 
-# Récupère le modèle par défaut depuis la variable d'environnement
-DEFAULT_MODEL = os.environ.get("DEFAULT_MODEL", "gpt-5-mini")
+# Récupère le modèle par défaut depuis la variable d'environnement ou `st.secrets`
+DEFAULT_MODEL = os.environ.get("DEFAULT_MODEL")
+try:
+    DEFAULT_MODEL = DEFAULT_MODEL or st.secrets.get("DEFAULT_MODEL")
+except Exception:
+    DEFAULT_MODEL = DEFAULT_MODEL
+DEFAULT_MODEL = DEFAULT_MODEL or "gpt-5-mini"
 
 # Configuration de la page
 st.set_page_config(page_title="Mon Tracker de Vols", page_icon="✈️")
@@ -33,6 +38,11 @@ df = pd.DataFrame(data)
 
 # Si la clé SerpApi est configurée, tenter de récupérer des prix réels
 serpapi_key = os.environ.get("SERPAPI_API_KEY")
+try:
+    serpapi_key = serpapi_key or st.secrets.get("SERPAPI_API_KEY")
+except Exception:
+    serpapi_key = serpapi_key
+
 if serpapi_key:
     origin = "Paris"
     destination = "Hurghada"
