@@ -1346,5 +1346,318 @@ document.getElementById('schedule-modal').addEventListener('click', function(e) 
 // ============================================================
 initDemoData();
 </script>
+
+<style>
+/* ===== COMPARISON VIEW ===== */
+.compare-wrap{background:var(--navy2);border-radius:12px;padding:20px;border:1px solid rgba(66,105,137,0.3);margin-top:8px}
+.compare-radar-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.compare-radar-box{text-align:center}
+.compare-radar-box .cr-date{font-family:var(--font-h);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.compare-radar-box .cr-score{font-family:var(--font-h);font-size:1.8rem;font-weight:800}
+.delta-table{width:100%;border-collapse:collapse}
+.delta-table th{font-family:var(--font-h);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--grey2);padding:6px 8px;text-align:left;border-bottom:1px solid rgba(66,105,137,0.3)}
+.delta-table td{padding:7px 8px;font-size:0.8rem;border-bottom:1px solid rgba(66,105,137,0.1)}
+.delta-table tr:last-child td{border-bottom:none}
+.delta-pos{color:var(--green);font-weight:700}
+.delta-neg{color:#ff6b6b;font-weight:700}
+.delta-neu{color:var(--grey2)}
+.compare-select-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.compare-select-row label{font-family:var(--font-h);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--grey2)}
+.compare-select-row select{background:var(--navy2);border:1px solid var(--grey1);border-radius:6px;padding:6px 10px;color:#e8f4fd;font-family:var(--font-b);font-size:0.82rem;outline:none}
+/* Club filter */
+.club-filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.club-chip{background:var(--navy3);border:1px solid rgba(66,105,137,0.3);border-radius:20px;padding:4px 12px;font-family:var(--font-h);font-size:0.72rem;font-weight:600;color:var(--grey2);cursor:pointer;transition:all .2s}
+.club-chip.active{background:rgba(31,163,244,0.15);border-color:var(--blue);color:var(--blue)}
+/* CSV export btn */
+.btn-csv{background:rgba(39,193,145,0.15);border:1px solid rgba(39,193,145,0.4);border-radius:6px;padding:6px 14px;color:var(--green);font-family:var(--font-h);font-size:0.75rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-csv:hover{background:rgba(39,193,145,0.25)}
+/* Overlay radar legend */
+.radar-legend{display:flex;gap:16px;justify-content:center;margin-top:8px}
+.radar-legend span{font-family:var(--font-h);font-size:0.68rem;font-weight:600;display:flex;align-items:center;gap:4px}
+.rl-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+</style>
+
+<script>
+// ============================================================
+// BILAN COMPARISON
+// ============================================================
+function openFicheWithCompare(benefId) {
+  openFiche(benefId); // Use existing openFiche, then add compare button
+  setTimeout(() => {
+    const histDiv = document.querySelector('.bilan-history-list');
+    if (histDiv) {
+      const btn = document.createElement('button');
+      btn.className = 'btn-small';
+      btn.style.cssText = 'width:100%;margin-top:8px;color:var(--blue);border-color:var(--blue)';
+      btn.textContent = '↔ Comparer 2 bilans';
+      btn.onclick = () => showCompareView(benefId);
+      histDiv.after(btn);
+    }
+  }, 50);
+}
+
+function showCompareView(benefId) {
+  const bilans = loadBilans().filter(b => b.benefId === benefId).sort((a,b) => new Date(a.date)-new Date(b.date));
+  const ben = loadBenefs().find(b => b.id === benefId);
+  if (bilans.length < 2) {
+    alert('Il faut au moins 2 bilans pour comparer.');
+    return;
+  }
+  const panel = document.getElementById('fiche-detail-content');
+  if (!panel) return;
+
+  const opts = bilans.map((b,i) => `<option value="${i}">${b.date} · N${b.level} · ${b.globalScore||0}/100</option>`).join('');
+  panel.innerHTML = `
+    <div class="section-title">Comparaison de bilans</div>
+    <div class="compare-select-row">
+      <label>Bilan A :</label>
+      <select id="cmp-a">${opts}</select>
+      <label>Bilan B :</label>
+      <select id="cmp-b">${opts.replace('value="0"','').replace('<option value="1"','<option value="1" selected')}</select>
+      <button class="btn-small" style="color:var(--blue);border-color:var(--blue)" onclick="renderCompare('${benefId}')">Comparer →</button>
+    </div>
+    <div id="compare-result"></div>`;
+
+  // auto-select last two
+  const selA = document.getElementById('cmp-a');
+  const selB = document.getElementById('cmp-b');
+  if (selA && bilans.length >= 2) { selA.value = bilans.length - 2; selB.value = bilans.length - 1; }
+  renderCompare(benefId);
+}
+
+function renderCompare(benefId) {
+  const bilans = loadBilans().filter(b => b.benefId === benefId).sort((a,b) => new Date(a.date)-new Date(b.date));
+  const ben = loadBenefs().find(b => b.id === benefId);
+  const idxA = parseInt(document.getElementById('cmp-a')?.value || 0);
+  const idxB = parseInt(document.getElementById('cmp-b')?.value || 1);
+  const biA = bilans[idxA], biB = bilans[idxB];
+  if (!biA || !biB || biA.id === biB.id) return;
+
+  const scoresA = biA.scores || calcScores(biA.mesures, biA.genre, biA.level);
+  const scoresB = biB.scores || calcScores(biB.mesures, biB.genre, biB.level);
+  const gsA = biA.globalScore || calcGlobalScore(scoresA);
+  const gsB = biB.globalScore || calcGlobalScore(scoresB);
+  const slA = getScoreLabel(gsA), slB = getScoreLabel(gsB);
+
+  // All shared indicators
+  const indsA = getIndicatorsForLevel(biA.level);
+  const indsB = getIndicatorsForLevel(biB.level);
+  const sharedKeys = indsA.map(i=>i.key).filter(k => scoresB[k] !== undefined);
+  const sharedInds = indsA.filter(i => sharedKeys.includes(i.key));
+
+  // Build overlay radar SVG
+  const radarSvg = buildCompareRadarSVG(sharedInds, scoresA, scoresB, 220);
+
+  // Delta table
+  const tableRows = sharedInds.map(ind => {
+    const sA = scoresA[ind.key] ?? 0, sB = scoresB[ind.key] ?? 0;
+    const d = sB - sA;
+    const cls = d > 3 ? 'delta-pos' : d < -3 ? 'delta-neg' : 'delta-neu';
+    const arrow = d > 3 ? '↑' : d < -3 ? '↓' : '→';
+    const vA = biA.mesures?.[ind.key] ?? '—';
+    const vB = biB.mesures?.[ind.key] ?? '—';
+    return `<tr>
+      <td><strong>${ind.label}</strong></td>
+      <td>${isNaN(vA)?'—':vA}${ind.unit} <span style="color:${slA.color};font-size:0.72rem">(${sA}/100)</span></td>
+      <td>${isNaN(vB)?'—':vB}${ind.unit} <span style="color:${slB.color};font-size:0.72rem">(${sB}/100)</span></td>
+      <td class="${cls}">${arrow} ${d > 0 ? '+' : ''}${d} pts</td>
+    </tr>`;
+  }).join('');
+
+  const gsDelta = gsB - gsA;
+  const gsDeltaClass = gsDelta >= 0 ? 'delta-pos' : 'delta-neg';
+
+  document.getElementById('compare-result').innerHTML = `
+    <div class="compare-wrap">
+      <div class="compare-radar-row">
+        <div class="compare-radar-box">
+          <div class="cr-date" style="color:${slA.color}">${biA.date} · N${biA.level}</div>
+          <div class="cr-score" style="color:${slA.color}">${gsA}<span style="font-size:1rem">/100</span></div>
+          <div style="font-size:0.72rem;color:${slA.color};font-family:var(--font-h);font-weight:600;text-transform:uppercase;letter-spacing:1px">${slA.label}</div>
+        </div>
+        <div class="compare-radar-box">
+          <div class="cr-date" style="color:${slB.color}">${biB.date} · N${biB.level}</div>
+          <div class="cr-score" style="color:${slB.color}">${gsB}<span style="font-size:1rem">/100</span></div>
+          <div style="font-size:0.72rem;color:${slB.color};font-family:var(--font-h);font-weight:600;text-transform:uppercase;letter-spacing:1px">${slB.label}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;margin-bottom:12px">
+        ${radarSvg}
+      </div>
+      <div class="radar-legend">
+        <span><span class="rl-dot" style="background:rgba(31,163,244,0.8)"></span>${biA.date}</span>
+        <span><span class="rl-dot" style="background:rgba(39,193,145,0.8)"></span>${biB.date}</span>
+      </div>
+      <div style="margin:16px 0;text-align:center;font-family:var(--font-h);font-size:0.88rem">
+        Évolution globale : <span class="${gsDeltaClass}" style="font-size:1.1rem">${gsDelta >= 0 ? '+' : ''}${gsDelta} pts</span>
+      </div>
+      <table class="delta-table">
+        <thead><tr><th>Indicateur</th><th>${biA.date}</th><th>${biB.date}</th><th>Évolution</th></tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>`;
+}
+
+function buildCompareRadarSVG(inds, scoresA, scoresB, size) {
+  if (!inds.length) return '';
+  const n = inds.length, cx = size/2, cy = size/2, R = size/2 - 28;
+  const angle = i => (Math.PI*2*i/n) - Math.PI/2;
+  const pt = (i, r) => ({x: cx + r*Math.cos(angle(i)), y: cy + r*Math.sin(angle(i))});
+
+  let rings = '';
+  [0.25,0.5,0.75,1].forEach(f => {
+    const pts = inds.map((_,i) => pt(i, R*f));
+    rings += `<polygon points="${pts.map(p=>p.x+','+p.y).join(' ')}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  });
+  let axes = inds.map((_,i) => {const p=pt(i,R);return`<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;}).join('');
+  const ptsA = inds.map((ind,i) => pt(i, R*(scoresA[ind.key]??0)/100));
+  const ptsB = inds.map((ind,i) => pt(i, R*(scoresB[ind.key]??0)/100));
+  const pathA = ptsA.map((p,i) => (i===0?'M':'L')+p.x+','+p.y).join(' ')+' Z';
+  const pathB = ptsB.map((p,i) => (i===0?'M':'L')+p.x+','+p.y).join(' ')+' Z';
+  let labels = inds.map((ind,i) => {const p=pt(i,R+18);const s=ind.label.split(' ')[0];return`<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat,sans-serif" font-size="9" fill="#86A7BC">${s}</text>`;}).join('');
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    ${rings}${axes}
+    <path d="${pathA}" fill="rgba(31,163,244,0.15)" stroke="#1FA3F4" stroke-width="2" stroke-dasharray="4,2"/>
+    <path d="${pathB}" fill="rgba(39,193,145,0.15)" stroke="#27C191" stroke-width="2"/>
+    ${ptsA.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#1FA3F4"/>`).join('')}
+    ${ptsB.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#27C191"/>`).join('')}
+    ${labels}
+  </svg>`;
+}
+
+// ============================================================
+// CSV EXPORT
+// ============================================================
+function exportCSV(anonymize) {
+  const benefs = loadBenefs();
+  const bilans = loadBilans();
+  const rows = [['ID','Prénom','Nom','Age','Genre','Club','Date','Niveau','Score Global','Âge Bio','Tour Taille','IMC','Handgrip','Souplesse','Équilibre','Marche6','Masse Grasse','Masse Musc','Eau','Mobilité eGym','Force eGym','VO2max','Jump Test','Coach']];
+  bilans.forEach(bi => {
+    const ben = benefs.find(b => b.id === bi.benefId);
+    if (!ben) return;
+    const m = bi.mesures || {};
+    const gs = bi.globalScore || 0;
+    const bioAge = calcBioAge(m.age || ben.age || 0, gs);
+    const prenom = anonymize ? '' : ben.prenom;
+    const nom = anonymize ? 'ID-'+bi.id.substr(-6).toUpperCase() : ben.nom;
+    rows.push([
+      bi.id, prenom, nom, ben.age, ben.genre, ben.club, bi.date, bi.level, gs, bioAge,
+      m.tourTaille||'', m.imc||'', m.handgrip||'', m.souplesse||'', m.equilibre||'', m.marche6||'',
+      m.masseGrasse||'', m.masseMusc||'', m.eau||'', m.mobiliteGym||'', m.forceGym||'', m.vo2max||'', m.jumpTest||'',
+      bi.coach||''
+    ]);
+  });
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = (anonymize ? 'bilans-anonymises' : 'bilans-complets')+'-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// CLUB FILTER
+// ============================================================
+let activeClub = 'all';
+
+function renderClubFilter() {
+  const benefs = loadBenefs();
+  const clubs = ['all', ...new Set(benefs.map(b => b.club))];
+  return `<div class="club-filter-row">
+    ${clubs.map(c => `<span class="club-chip ${c===activeClub?'active':''}" onclick="setClubFilter('${c}',this)">${c==='all'?'Tous les clubs':c}</span>`).join('')}
+  </div>`;
+}
+
+function setClubFilter(club, el) {
+  activeClub = club;
+  document.querySelectorAll('.club-chip').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  renderBenefList();
+}
+
+// Patch renderBenefList to include club filter and inject compare button
+const _origRenderBenefList = renderBenefList;
+renderBenefList = function() {
+  const benefs = loadBenefs();
+  const bilans = loadBilans();
+  const q = (document.getElementById('benef-search')?.value || '').toLowerCase();
+  let filtered = benefs.filter(b => (b.prenom+' '+b.nom).toLowerCase().includes(q));
+  if (activeClub !== 'all') filtered = filtered.filter(b => b.club === activeClub);
+
+  const filterHtml = renderClubFilter();
+  const html = filtered.map(ben => {
+    const benBilans = bilans.filter(bi => bi.benefId === ben.id).sort((a,b) => new Date(b.date)-new Date(a.date));
+    const last = benBilans[0];
+    const score = last ? (last.globalScore||0) : null;
+    const sl = score !== null ? getScoreLabel(score) : null;
+    const initials = ben.prenom[0] + ben.nom[0];
+    return `<div class="benef-card" onclick="openFiche('${ben.id}')">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:0.9rem;font-weight:800;color:#fff;flex-shrink:0">${initials}</div>
+        <div>
+          <div class="benef-name">${ben.prenom} ${ben.nom}</div>
+          <div class="benef-info">${ben.age} ans · ${ben.genre === 'M' ? 'Homme' : 'Femme'} · ${ben.club}</div>
+        </div>
+      </div>
+      <div class="benef-stats">
+        ${score !== null ? `<div><div class="score-big" style="color:${sl.color}">${score}</div><div class="score-label">/100 · ${sl.label}</div></div>` : '<div style="color:#86A7BC;font-size:0.8rem">Aucun bilan</div>'}
+        <div style="text-align:right">
+          <span class="badge n${last ? last.level : 1}">N${last ? last.level : '—'}</span>
+          <div style="font-size:0.7rem;color:#86A7BC;margin-top:4px">${last ? last.date : 'Pas de bilan'}</div>
+          <div style="font-size:0.7rem;color:#86A7BC">${benBilans.length} bilan${benBilans.length>1?'s':''}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('') || '<p style="color:#86A7BC">Aucun bénéficiaire trouvé</p>';
+
+  const grid = document.getElementById('benef-grid');
+  const searchRow = grid?.previousElementSibling;
+  if (searchRow && !document.querySelector('.club-filter-row')) {
+    searchRow.insertAdjacentHTML('afterend', filterHtml);
+  } else if (document.querySelector('.club-filter-row')) {
+    document.querySelector('.club-filter-row').parentElement.innerHTML = renderClubFilter();
+  }
+  if (grid) grid.innerHTML = html;
+};
+
+// Patch dashboard to add CSV export button
+const _origRenderDashboard = renderDashboard;
+renderDashboard = function() {
+  _origRenderDashboard();
+  // Add CSV export buttons below stats
+  const statsGrid = document.getElementById('stats-grid');
+  if (statsGrid && !document.getElementById('csv-btns')) {
+    const div = document.createElement('div');
+    div.id = 'csv-btns';
+    div.style.cssText = 'display:flex;gap:8px;margin-bottom:20px';
+    div.innerHTML = `
+      <button class="btn-csv" onclick="exportCSV(false)">📥 Export CSV complet</button>
+      <button class="btn-csv" onclick="exportCSV(true)">🔒 Export CSV anonymisé</button>`;
+    statsGrid.after(div);
+  }
+};
+
+// Patch openFiche to add compare button
+const _origOpenFiche = openFiche;
+openFiche = function(benefId) {
+  _origOpenFiche(benefId);
+  setTimeout(() => {
+    const bilans = loadBilans().filter(b => b.benefId === benefId);
+    if (bilans.length >= 2) {
+      const histList = document.querySelector('.bilan-history-list');
+      if (histList && !document.getElementById('btn-compare')) {
+        const btn = document.createElement('button');
+        btn.id = 'btn-compare';
+        btn.className = 'btn-small';
+        btn.style.cssText = 'width:100%;margin-top:10px;color:var(--blue);border-color:var(--blue);padding:8px;font-size:0.78rem';
+        btn.textContent = '↔ Comparer 2 bilans';
+        btn.onclick = () => showCompareView(benefId);
+        histList.after(btn);
+      }
+    }
+  }, 80);
+};
+</script>
+
 </body>
 </html>
