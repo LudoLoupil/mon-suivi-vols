@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Espace Bien-être | wellnesstraining</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1FA3F4;--blue2:#24B6FF;
+  --green:#27C191;
+  --violet:#7C0466;
+  --navy:#243744;
+  --grad:linear-gradient(135deg,#1FA3F4,#27C191);
+  --bg:#f0f6fb;--bg2:#e4eef7;
+  --card:#ffffff;
+  --text:#1a2e3d;--text2:#426989;--text3:#6b8fa8;
+  --border:#d0e3ef;
+  --font-h:'Montserrat',sans-serif;
+  --font-b:'Barlow',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ===== LOGIN ===== */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#e8f4fd 0%,#d0e8f5 100%)}
+.login-box{background:#fff;border-radius:20px;padding:40px;width:380px;max-width:95vw;box-shadow:0 20px 60px rgba(31,163,244,0.12)}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo .w-icon{display:inline-flex;gap:3px;align-items:flex-end;margin-bottom:8px}
+.login-logo .w-icon span{width:8px;border-radius:3px 3px 0 0;background:var(--grad)}
+.login-logo .w-icon span:nth-child(1){height:28px}
+.login-logo .w-icon span:nth-child(2){height:20px}
+.login-logo .w-icon span:nth-child(3){height:32px}
+.login-logo .w-icon span:nth-child(4){height:20px}
+.login-logo .w-icon span:nth-child(5){height:28px}
+.login-logo h1{font-family:var(--font-h);font-size:1.1rem;font-weight:700;letter-spacing:2px;color:var(--navy);text-transform:uppercase}
+.login-logo p{font-size:0.75rem;color:var(--text3);margin-top:2px}
+.login-box h2{font-family:var(--font-h);font-size:1rem;font-weight:600;margin-bottom:20px;color:var(--text2)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:6px;font-family:var(--font-h)}
+.form-group input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--font-b);font-size:0.95rem;outline:none;transition:border .2s}
+.form-group input:focus{border-color:var(--blue)}
+.btn-primary{width:100%;background:var(--grad);border:none;border-radius:10px;padding:13px;color:#fff;font-family:var(--font-h);font-size:0.9rem;font-weight:700;letter-spacing:1px;cursor:pointer;transition:opacity .2s;box-shadow:0 4px 16px rgba(31,163,244,0.3)}
+.btn-primary:hover{opacity:.92}
+.login-err{color:#e05252;font-size:0.78rem;margin-bottom:10px;display:none}
+.demo-link{text-align:center;margin-top:16px;font-size:0.78rem;color:var(--text3)}
+.demo-link span{color:var(--blue);cursor:pointer;font-weight:600}
+
+/* ===== APP ===== */
+#app{display:none;flex-direction:column;min-height:100vh}
+
+/* Header */
+header{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;box-shadow:0 2px 12px rgba(31,163,244,0.06);position:sticky;top:0;z-index:100}
+.header-logo{display:flex;align-items:center;gap:10px}
+.header-logo .w-icon{display:inline-flex;gap:2px;align-items:flex-end}
+.header-logo .w-icon span{width:5px;border-radius:2px 2px 0 0;background:var(--grad)}
+.header-logo .w-icon span:nth-child(1){height:16px}
+.header-logo .w-icon span:nth-child(2){height:11px}
+.header-logo .w-icon span:nth-child(3){height:19px}
+.header-logo .w-icon span:nth-child(4){height:11px}
+.header-logo .w-icon span:nth-child(5){height:16px}
+.header-logo h1{font-family:var(--font-h);font-size:0.9rem;font-weight:700;letter-spacing:1px;color:var(--navy)}
+.header-right{display:flex;align-items:center;gap:12px}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:0.85rem;font-weight:800;color:#fff;cursor:pointer;flex-shrink:0}
+.user-name-hdr{font-size:0.85rem;font-weight:600;color:var(--text)}
+.btn-logout{background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;color:var(--text2);font-size:0.75rem;font-family:var(--font-h);font-weight:600;cursor:pointer;transition:all .2s}
+.btn-logout:hover{border-color:var(--blue);color:var(--blue)}
+
+/* Nav */
+nav{background:#fff;border-bottom:1px solid var(--border);display:flex;padding:0;overflow-x:auto}
+.nav-tab{padding:14px 24px;font-family:var(--font-h);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
+.nav-tab:hover{color:var(--blue)}
+.nav-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* Main */
+main{flex:1;padding:28px 24px;max-width:1100px;width:100%;margin:0 auto}
+
+/* Cards */
+.card{background:var(--card);border-radius:16px;padding:24px;border:1px solid var(--border);box-shadow:0 2px 12px rgba(31,163,244,0.04)}
+.section-title{font-family:var(--font-h);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin-bottom:16px}
+
+/* Score arc */
+.score-arc-wrap{text-align:center;padding:20px 0 10px}
+.score-big{font-family:var(--font-h);font-size:3.5rem;font-weight:800;line-height:1}
+.score-lbl{font-family:var(--font-h);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+/* Bio age */
+.bio-box{background:var(--bg);border-radius:12px;padding:16px;text-align:center;margin:16px 0}
+.bio-box .ba-lbl{font-size:0.68rem;font-family:var(--font-h);font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:6px}
+.bio-box .ba-val{font-family:var(--font-h);font-size:2rem;font-weight:800;color:var(--navy)}
+.bio-box .ba-delta{font-size:0.82rem;font-weight:600;margin-top:4px}
+.ba-delta.good{color:var(--green)}
+.ba-delta.bad{color:#e05252}
+.ba-delta.neutral{color:var(--text3)}
+
+/* Progress bars */
+.ind-row{margin-bottom:14px}
+.ind-top{display:flex;justify-content:space-between;margin-bottom:5px}
+.ind-name{font-size:0.8rem;font-weight:600;font-family:var(--font-h);color:var(--text)}
+.ind-vals{font-size:0.71rem;color:var(--text3)}
+.ind-bar{height:7px;background:var(--bg2);border-radius:4px;overflow:hidden}
+.ind-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.ind-fill.green{background:linear-gradient(90deg,#27C191,#34d9a8)}
+.ind-fill.orange{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.ind-fill.red{background:linear-gradient(90deg,#ef4444,#f87171)}
+
+/* Radar */
+.radar-wrap{display:flex;justify-content:center;margin:8px 0}
+
+/* Profile chip */
+.profile-chip{display:inline-block;padding:5px 16px;border-radius:20px;font-family:var(--font-h);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat-mini{background:var(--bg);border-radius:12px;padding:14px;text-align:center;border:1px solid var(--border)}
+.stat-mini .sv{font-family:var(--font-h);font-size:1.5rem;font-weight:800;color:var(--navy)}
+.stat-mini .sl{font-size:0.68rem;font-family:var(--font-h);font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-top:2px}
+
+/* Bilan history */
+.bh-list .bh-item{padding:12px 16px;border-radius:10px;border:1.5px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all .2s}
+.bh-list .bh-item:hover,.bh-list .bh-item.active{border-color:var(--blue);background:rgba(31,163,244,0.04)}
+.bh-item-top{display:flex;justify-content:space-between;align-items:center}
+.bh-item-date{font-family:var(--font-h);font-size:0.82rem;font-weight:700;color:var(--text)}
+.bh-item-score{font-family:var(--font-h);font-size:1.1rem;font-weight:800}
+.bh-item-meta{font-size:0.72rem;color:var(--text3);margin-top:3px}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.68rem;font-weight:700;font-family:var(--font-h)}
+.badge.n1{background:rgba(31,163,244,0.12);color:var(--blue)}
+.badge.n2{background:rgba(39,193,145,0.15);color:var(--green)}
+.badge.n3{background:rgba(124,4,102,0.12);color:#9c2abf}
+.badge.n4{background:rgba(245,158,11,0.12);color:#d97706}
+
+/* Programme */
+.reco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:4px}
+.reco-card{background:var(--bg);border-radius:12px;padding:16px;border:1px solid var(--border)}
+.reco-card h4{font-family:var(--font-h);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:12px}
+.reco-card ul{list-style:none;padding:0}
+.reco-card li{font-size:0.8rem;color:var(--text);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.4}
+.reco-card li:last-child{border-bottom:none}
+.reco-card li::before{content:"→ ";color:var(--green);font-weight:700}
+
+/* Coach / messaging */
+.coach-card{display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg);border-radius:12px;border:1px solid var(--border);margin-bottom:20px}
+.coach-avatar{width:52px;height:52px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:1.1rem;font-weight:800;color:#fff;flex-shrink:0}
+.coach-info .name{font-family:var(--font-h);font-weight:700;font-size:0.95rem}
+.coach-info .sub{font-size:0.75rem;color:var(--text3)}
+.btn-rdv{background:var(--grad);border:none;border-radius:8px;padding:8px 18px;color:#fff;font-family:var(--font-h);font-size:0.78rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(31,163,244,0.25)}
+.btn-rdv:hover{opacity:.9}
+.messages{background:var(--bg);border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.msg-list{padding:16px;display:flex;flex-direction:column;gap:10px;max-height:340px;overflow-y:auto}
+.msg{max-width:75%;padding:10px 14px;border-radius:12px;font-size:0.85rem;line-height:1.4}
+.msg.coach{background:#fff;border:1px solid var(--border);align-self:flex-start;border-radius:4px 12px 12px 12px}
+.msg.me{background:var(--grad);color:#fff;align-self:flex-end;border-radius:12px 4px 12px 12px}
+.msg-sender{font-family:var(--font-h);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:3px}
+.msg.me .msg-sender{color:rgba(255,255,255,0.7);text-align:right}
+.msg-input-row{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);background:#fff}
+.msg-input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:9px 14px;font-family:var(--font-b);font-size:0.88rem;color:var(--text);outline:none;transition:border .2s}
+.msg-input:focus{border-color:var(--blue)}
+.btn-send{background:var(--grad);border:none;border-radius:8px;padding:9px 18px;color:#fff;font-family:var(--font-h);font-size:0.78rem;font-weight:700;cursor:pointer}
+
+/* Prochain bilan */
+.next-bilan-box{background:linear-gradient(135deg,rgba(31,163,244,0.08),rgba(39,193,145,0.08));border:1.5px solid rgba(31,163,244,0.2);border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.next-bilan-box .nbb-label{font-family:var(--font-h);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:4px}
+.next-bilan-box .nbb-date{font-family:var(--font-h);font-size:1rem;font-weight:700;color:var(--text)}
+
+/* Layout helpers */
+.two-col{display:grid;grid-template-columns:300px 1fr;gap:20px}
+@media(max-width:800px){.two-col{grid-template-columns:1fr}}
+.three-col{display:grid;grid-template-columns:260px 1fr;gap:20px}
+@media(max-width:700px){.three-col{grid-template-columns:1fr}}
+.gap-top{margin-top:20px}
+.flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+
+/* Evolution */
+.evo-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.evo-label{font-family:var(--font-h);font-size:0.72rem;font-weight:600;color:var(--text2);width:100px;flex-shrink:0}
+.evo-track{flex:1;height:8px;background:var(--bg2);border-radius:4px;position:relative;overflow:visible}
+.evo-fill{height:100%;border-radius:4px;position:relative;transition:width .6s}
+.evo-dot{width:12px;height:12px;border-radius:50%;background:var(--blue);border:2px solid #fff;box-shadow:0 1px 4px rgba(31,163,244,0.4);position:absolute;right:-6px;top:-2px}
+.evo-score{font-family:var(--font-h);font-size:0.78rem;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="w-icon"><span></span><span></span><span></span><span></span><span></span></div>
+      <h1>wellnesstraining</h1>
+      <p>Mon espace bien-être</p>
+    </div>
+    <h2>Connexion à mon espace</h2>
+    <div class="form-group"><label>Email</label><input id="l-email" type="email" placeholder="prenom.nom@email.fr"></div>
+    <div class="form-group"><label>Mot de passe</label><input id="l-pass" type="password" placeholder="••••••••"></div>
+    <p class="login-err" id="l-err">Email ou mot de passe incorrect</p>
+    <button class="btn-primary" onclick="doLogin()">Accéder à mon espace</button>
+    <div class="demo-link">Compte démo : <span onclick="fillDemo()">sophie.martin@email.fr / bilan2025</span></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="header-logo">
+      <div class="w-icon"><span></span><span></span><span></span><span></span><span></span></div>
+      <h1>wellnesstraining</h1>
+    </div>
+    <div class="header-right">
+      <span class="user-name-hdr" id="hdr-name"></span>
+      <div class="avatar" id="hdr-avatar"></div>
+      <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </header>
+  <nav>
+    <div class="nav-tab active" onclick="showTab('profil',this)">🏅 Mon Profil</div>
+    <div class="nav-tab" onclick="showTab('bilans',this)">📊 Mes Bilans</div>
+    <div class="nav-tab" onclick="showTab('programme',this)">🏃 Mon Programme</div>
+    <div class="nav-tab" onclick="showTab('coach',this)">💬 Mon Coach</div>
+  </nav>
+  <main>
+
+    <!-- MON PROFIL -->
+    <section id="tab-profil">
+      <div class="two-col">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <div id="profil-gauge"></div>
+            <div id="profil-bio"></div>
+          </div>
+          <div class="card">
+            <div class="section-title">Radar des indicateurs</div>
+            <div class="radar-wrap" id="profil-radar"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <div class="flex-between" style="margin-bottom:0">
+              <div>
+                <div id="profil-name" style="font-family:var(--font-h);font-size:1.3rem;font-weight:800;color:var(--navy)"></div>
+                <div id="profil-meta" style="font-size:0.8rem;color:var(--text3);margin-top:3px"></div>
+              </div>
+              <div id="profil-chip"></div>
+            </div>
+            <div class="stats-row gap-top" id="profil-stats"></div>
+            <div id="profil-next-bilan"></div>
+          </div>
+          <div class="card">
+            <div class="section-title">Mes indicateurs — dernier bilan</div>
+            <div id="profil-indicators"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MES BILANS -->
+    <section id="tab-bilans" style="display:none">
+      <div class="three-col">
+        <div>
+          <div class="section-title">Historique</div>
+          <div class="bh-list" id="bilan-history-list"></div>
+        </div>
+        <div id="bilan-detail-panel" class="card"></div>
+      </div>
+    </section>
+
+    <!-- MON PROGRAMME -->
+    <section id="tab-programme" style="display:none">
+      <div class="card">
+        <div class="flex-between">
+          <div>
+            <div class="section-title" style="margin-bottom:4px">Mon programme personnalisé</div>
+            <div style="font-size:0.8rem;color:var(--text3)" id="prog-subtitle"></div>
+          </div>
+          <div id="prog-score-chip"></div>
+        </div>
+        <div id="prog-evo" style="margin-top:20px;margin-bottom:24px"></div>
+        <div class="reco-grid" id="prog-recos"></div>
+      </div>
+    </section>
+
+    <!-- MON COACH -->
+    <section id="tab-coach" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px">
+        <div>
+          <div class="coach-card" id="coach-info"></div>
+          <div class="card gap-top">
+            <div class="section-title">Demander un bilan</div>
+            <p style="font-size:0.82rem;color:var(--text3);margin-bottom:14px">Votre prochain bilan sera planifié par votre coach.</p>
+            <button class="btn-rdv" onclick="demanderBilan()" id="btn-rdv">📅 Demander un bilan</button>
+            <div id="rdv-confirm" style="display:none;margin-top:12px;background:rgba(39,193,145,0.1);border:1px solid rgba(39,193,145,0.3);border-radius:8px;padding:10px;font-size:0.8rem;color:var(--green)">✓ Demande envoyée ! Votre coach vous contactera pour fixer la date.</div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title">Messagerie</div>
+          <div class="messages">
+            <div class="msg-list" id="msg-list"></div>
+            <div class="msg-input-row">
+              <input class="msg-input" id="msg-input" placeholder="Écrire un message…" onkeydown="if(event.key==='Enter')sendMsg()">
+              <button class="btn-send" onclick="sendMsg()">Envoyer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ===== SHARED SCORING (mirrors bilan-forme.html) =====
+function scoreIndicator(key, value, genre) {
+  const v = parseFloat(value);
+  if (isNaN(v)) return null;
+  const H = (genre === 'M');
+  switch(key) {
+    case 'tourTaille': return Math.max(0,Math.min(100,100-Math.max(0,v-(H?94:80))*3));
+    case 'imc': return Math.max(0,Math.min(100,100-Math.abs(v-22)*8));
+    case 'handgrip': return Math.min(100,(v/(H?45:30))*100);
+    case 'souplesse': return Math.min(100,Math.max(0,50+v*2));
+    case 'equilibre': return Math.min(100,(v/30)*100);
+    case 'marche6': return Math.min(100,(v/500)*100);
+    case 'masseGrasse': return Math.max(0,Math.min(100,100-Math.max(0,v-(H?20:30))*4));
+    case 'masseMusc': return Math.min(100,(v/(H?38:26))*100);
+    case 'eau': return Math.max(0,Math.min(100,100-Math.abs(v-(H?60:55))*3));
+    case 'mobiliteGym': case 'forceGym': return Math.min(100,Math.max(0,v));
+    case 'vo2max': return Math.min(100,(v/(H?50:42))*100);
+    case 'jumpTest': return Math.min(100,(v/40)*100);
+    default: return 50;
+  }
+}
+
+function getIndicatorsForLevel(level) {
+  const base=[{key:'tourTaille',label:'Tour de taille',unit:'cm'},{key:'imc',label:'IMC',unit:''},{key:'handgrip',label:'Handgrip',unit:'kg'},{key:'souplesse',label:'Souplesse',unit:'cm'},{key:'equilibre',label:'Équilibre',unit:'s'},{key:'marche6',label:'Marche 6 min',unit:'m'}];
+  const n2=[{key:'masseGrasse',label:'Masse grasse',unit:'%'},{key:'masseMusc',label:'Masse musculaire',unit:'kg'},{key:'eau',label:'Eau corporelle',unit:'%'}];
+  const n3=[{key:'mobiliteGym',label:'Mobilité eGym',unit:'/100'},{key:'forceGym',label:'Force eGym',unit:'/100'},{key:'vo2max',label:'VO₂ max',unit:'ml/kg/min'}];
+  const n4=[{key:'jumpTest',label:'Jump Test',unit:'cm'}];
+  let inds=[...base];
+  if(level>=2)inds=[...inds,...n2];
+  if(level>=3)inds=[...inds,...n3];
+  if(level>=4)inds=[...inds,...n4];
+  return inds;
+}
+
+function calcScores(mesures, genre, level) {
+  const inds = getIndicatorsForLevel(level);
+  const scores = {};
+  inds.forEach(ind => {
+    const s = scoreIndicator(ind.key, mesures[ind.key], genre);
+    if(s!==null) scores[ind.key] = Math.round(s);
+  });
+  return scores;
+}
+function calcGlobalScore(scores) {
+  const vals=Object.values(scores).filter(v=>v!==null);
+  if(!vals.length)return 0;
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+}
+function getScoreLabel(s) {
+  if(s>=80)return{label:'Athlétique',color:'#27C191'};
+  if(s>=60)return{label:'Actif',color:'#1FA3F4'};
+  if(s>=40)return{label:'Modéré',color:'#f59e0b'};
+  if(s>=20)return{label:'Sédentaire',color:'#f97316'};
+  return{label:'À risque',color:'#ef4444'};
+}
+function calcBioAge(chronoAge, globalScore) {
+  return Math.round(chronoAge+(50-globalScore)*0.3);
+}
+function getTargetValue(key, genre) {
+  const H=(genre==='M');
+  const t={tourTaille:H?94:80,imc:22,handgrip:H?45:30,souplesse:5,equilibre:30,marche6:500,masseGrasse:H?18:27,masseMusc:H?38:26,eau:H?60:55,mobiliteGym:75,forceGym:75,vo2max:H?50:42,jumpTest:40};
+  return t[key]||'—';
+}
+
+function buildRecos(scores, genre, level) {
+  const inds=getIndicatorsForLevel(level);
+  const weak=inds.filter(i=>scores[i.key]!==undefined&&scores[i.key]<60).sort((a,b)=>scores[a.key]-scores[b.key]);
+  const rm={tourTaille:{e:'Cardio zone 2 : 3×45 min/sem. Marche rapide ou vélo',l:'Réduire sucres ajoutés et alcool',o:'Réduire le tour de taille de 2-3 cm'},imc:{e:'Renforcement 2×/sem + cardio modéré 3×/sem',l:'Déficit calorique modéré -300 kcal/j, privilégier protéines',o:'Atteindre IMC 21-23'},handgrip:{e:'Circuit grip 3×/sem : farmer walk, dead hang',l:'Apport protéique 1.6 g/kg/j',o:'Améliorer le grip de 5 kg en 3 mois'},souplesse:{e:'15 min étirements quotidiens, yoga 1×/sem',l:'Foam roller après séance, hydratation suffisante',o:'Atteindre +5 cm au sit-and-reach'},equilibre:{e:'Exercices unipodaux 5 min/j, BOSU, Pilates',l:'Marche pieds nus, proprioception au quotidien',o:'Tenir 30 s en équilibre monopodal'},marche6:{e:'Programme marche progressive : +50 m/sem',l:'10 000 pas/jour, limiter la sédentarité',o:'Dépasser 500 m au test de marche 6 min'},masseGrasse:{e:'Musculation 3×/sem pour maintenir la masse maigre',l:'Sommeil 7-8h, gestion du stress',o:'Réduire masse grasse de 2-3 % en 3 mois'},masseMusc:{e:'Renforcement progressif : charges ou TRX',l:'Protéines à chaque repas',o:'Gagner 1-2 kg de masse musculaire'},mobiliteGym:{e:'Mobilité articulaire 10-15 min/j',l:'Étirements actifs matin et soir',o:'Score mobilité eGym > 75/100'},forceGym:{e:'Programme force 3×/sem sur machines eGym',l:'Récupération active, sommeil suffisant',o:'Score force eGym > 75/100'},vo2max:{e:'HIIT 2×/sem : 8×1 min intensité max / 1 min récup',l:'Actif tous les jours : escaliers, vélo',o:'VO₂ max > 45 ml/kg/min'},jumpTest:{e:'Pliométrie 2×/sem : box jump, squat jump',l:'Créatine + glucides avant séance',o:'Jump test > 40 cm'}};
+  const e=[],l=[],o=[];
+  weak.slice(0,4).forEach(i=>{const r=rm[i.key];if(r){if(!e.includes(r.e))e.push(r.e);if(!l.includes(r.l))l.push(r.l);o.push(r.o);}});
+  if(!e.length)e.push('Maintenir votre niveau avec 3 séances/semaine');
+  if(!l.length)l.push('Sommeil 7-8h, hydratation 1.5-2L/j');
+  if(!o.length)o.push('Conserver tous vos indicateurs au-dessus de 70/100');
+  return{entrainement:e,lifestyle:l,objectifs:o};
+}
+
+// ===== SVG HELPERS =====
+function buildGaugeSVG(score, color, size) {
+  size=size||140;const r=size*0.43,cx=size/2,cy=size/2,sw=size*0.07;
+  const start=Math.PI,angle=start+(score/100)*Math.PI;
+  const x1=cx+r*Math.cos(start),y1=cy+r*Math.sin(start);
+  const x2=cx+r*Math.cos(angle),y2=cy+r*Math.sin(angle);
+  const large=score>50?1:0;
+  return `<svg width="${size}" height="${size*0.57}" viewBox="0 0 ${size} ${size*0.57}">
+    <path d="M${cx-r},${cy} A${r},${r} 0 0,1 ${cx+r},${cy}" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="${sw}" stroke-linecap="round"/>
+    <path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function buildRadarSVG(inds, scores, size) {
+  if(!inds.length)return'';
+  const n=inds.length,cx=size/2,cy=size/2,R=size/2-26;
+  const angle=i=>(Math.PI*2*i/n)-Math.PI/2;
+  const pt=(i,r)=>({x:cx+r*Math.cos(angle(i)),y:cy+r*Math.sin(angle(i))});
+  let rings='';
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const pts=inds.map((_,i)=>pt(i,R*f));
+    rings+=`<polygon points="${pts.map(p=>p.x+','+p.y).join(' ')}" fill="none" stroke="rgba(31,163,244,0.1)" stroke-width="1"/>`;
+  });
+  let axes=inds.map((_,i)=>{const p=pt(i,R);return`<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="rgba(31,163,244,0.15)" stroke-width="1"/>`;}).join('');
+  const dataPts=inds.map((ind,i)=>{const s=(scores[ind.key]??0)/100;return pt(i,R*s);});
+  const dataPath=dataPts.map((p,i)=>(i===0?'M':'L')+p.x+','+p.y).join(' ')+' Z';
+  let labels=inds.map((ind,i)=>{const p=pt(i,R+20);const short=ind.label.split(' ')[0];return`<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat,sans-serif" font-size="9" fill="#426989">${short}</text>`;}).join('');
+  return`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    ${rings}${axes}
+    <path d="${dataPath}" fill="rgba(31,163,244,0.12)" stroke="#1FA3F4" stroke-width="2"/>
+    ${dataPts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#1FA3F4" stroke="#fff" stroke-width="1.5"/>`).join('')}
+    ${labels}
+  </svg>`;
+}
+
+// ===== DEMO DATA =====
+const DEMO_USER = {
+  email:'sophie.martin@email.fr', password:'bilan2025',
+  prenom:'Sophie', nom:'Martin', age:34, genre:'F', club:'Paris 7', coach:'Julie Rousseau', coachLogin:'julie.r'
+};
+
+const DEMO_BILANS = [
+  {id:'bi1',date:'2024-06-15',level:2,mesures:{age:34,tourTaille:84,poids:65,taille:167,imc:23.3,handgrip:25,souplesse:6,equilibre:18,marche6:415,masseGrasse:30,masseMusc:23,eau:51},genre:'F'},
+  {id:'bi2',date:'2024-09-20',level:2,mesures:{age:34,tourTaille:82,poids:63,taille:167,imc:22.6,handgrip:27,souplesse:9,equilibre:24,marche6:450,masseGrasse:27,masseMusc:24,eau:53},genre:'F'},
+  {id:'bi3',date:'2024-12-10',level:2,mesures:{age:34,tourTaille:79,poids:61,taille:167,imc:21.9,handgrip:29,souplesse:12,equilibre:29,marche6:480,masseGrasse:25,masseMusc:25,eau:55},genre:'F'}
+];
+
+const DEMO_MESSAGES = [
+  {from:'coach',text:"Bonjour Sophie ! J'ai bien reçu votre dernier bilan. Belle progression sur la mobilité et la marche.",ts:'10:24'},
+  {from:'me',text:"Merci Julie ! Je commence à sentir la différence. Mon endurance est bien meilleure.",ts:'10:31'},
+  {from:'coach',text:"Parfait ! Pour le prochain mois, concentrez-vous surtout sur la souplesse. Je vous enverrai un programme détaillé.",ts:'10:45'},
+];
+
+let currentUser = null;
+let selectedBilanId = DEMO_BILANS[DEMO_BILANS.length-1].id;
+let messages = [...DEMO_MESSAGES];
+
+// ===== AUTH =====
+function fillDemo() {
+  document.getElementById('l-email').value = DEMO_USER.email;
+  document.getElementById('l-pass').value = DEMO_USER.password;
+}
+
+function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  if(email===DEMO_USER.email && pass===DEMO_USER.password) {
+    currentUser = DEMO_USER;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('hdr-name').textContent = DEMO_USER.prenom+' '+DEMO_USER.nom;
+    document.getElementById('hdr-avatar').textContent = DEMO_USER.prenom[0]+DEMO_USER.nom[0];
+    document.getElementById('l-err').style.display='none';
+    renderAll();
+  } else {
+    document.getElementById('l-err').style.display='block';
+  }
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')doLogin();});
+
+function doLogout() {
+  currentUser=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('l-email').value='';
+  document.getElementById('l-pass').value='';
+}
+
+// ===== NAV =====
+function showTab(id, el) {
+  document.querySelectorAll('section[id^="tab-"]').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).style.display='block';
+  if(el)el.classList.add('active');
+}
+
+// ===== RENDER ALL =====
+function renderAll() {
+  renderProfil();
+  renderBilansTab();
+  renderProgramme();
+  renderCoach();
+}
+
+// ===== MON PROFIL =====
+function renderProfil() {
+  const lastBilan = DEMO_BILANS[DEMO_BILANS.length-1];
+  const scores = calcScores(lastBilan.mesures, lastBilan.genre, lastBilan.level);
+  const globalScore = calcGlobalScore(scores);
+  const sl = getScoreLabel(globalScore);
+  const bioAge = calcBioAge(DEMO_USER.age, globalScore);
+  const bioDelta = bioAge - DEMO_USER.age;
+  const bioClass = bioDelta<0?'good':bioDelta>3?'bad':'neutral';
+  const bioText = bioDelta<0?`${Math.abs(bioDelta)} ans de moins que l'âge civil`:bioDelta>3?`${bioDelta} ans de plus`:'Dans la norme';
+  const inds = getIndicatorsForLevel(lastBilan.level);
+
+  // Gauge
+  document.getElementById('profil-gauge').innerHTML = `
+    <div class="score-arc-wrap">
+      ${buildGaugeSVG(globalScore, sl.color, 180)}
+      <div class="score-big" style="color:${sl.color};margin-top:-8px">${globalScore}</div>
+      <div style="font-size:0.65rem;color:var(--text3);margin-top:0">/100</div>
+      <div class="score-lbl" style="color:${sl.color}">${sl.label}</div>
+    </div>`;
+
+  document.getElementById('profil-bio').innerHTML = `
+    <div class="bio-box">
+      <div class="ba-lbl">Âge biologique estimé</div>
+      <div class="ba-val">${bioAge} ans</div>
+      <div class="ba-delta ${bioClass}">${bioText}</div>
+    </div>`;
+
+  document.getElementById('profil-name').textContent = DEMO_USER.prenom+' '+DEMO_USER.nom;
+  document.getElementById('profil-meta').textContent = `${DEMO_USER.age} ans · ${DEMO_USER.genre==='F'?'Femme':'Homme'} · ${DEMO_USER.club} · Coach : ${DEMO_USER.coach}`;
+
+  document.getElementById('profil-chip').innerHTML = `<span class="profile-chip" style="background:${sl.color}20;color:${sl.color};border:1px solid ${sl.color}40">${sl.label}</span>`;
+
+  document.getElementById('profil-stats').innerHTML = `
+    <div class="stat-mini"><div class="sv">${DEMO_BILANS.length}</div><div class="sl">Bilans</div></div>
+    <div class="stat-mini"><div class="sv" style="color:${sl.color}">${globalScore}</div><div class="sl">Score</div></div>
+    <div class="stat-mini"><div class="sv">${bioAge}</div><div class="sl">Âge bio</div></div>`;
+
+  document.getElementById('profil-next-bilan').innerHTML = `
+    <div class="next-bilan-box">
+      <div>
+        <div class="nbb-label">Prochain bilan prévu</div>
+        <div class="nbb-date">15 mars 2025 · Niveau 2</div>
+      </div>
+      <button class="btn-rdv" onclick="showTab('coach',document.querySelectorAll('.nav-tab')[3])">Contacter mon coach</button>
+    </div>`;
+
+  // Radar
+  document.getElementById('profil-radar').innerHTML = buildRadarSVG(inds, scores, 220);
+
+  // Indicators
+  const barsHtml = inds.map(ind => {
+    const s = scores[ind.key]??0;
+    const val = lastBilan.mesures[ind.key]??'—';
+    const target = getTargetValue(ind.key, DEMO_USER.genre);
+    const cls = s>=70?'green':s>=40?'orange':'red';
+    const color = s>=70?'#27C191':s>=40?'#f59e0b':'#ef4444';
+    return`<div class="ind-row">
+      <div class="ind-top">
+        <span class="ind-name">${ind.label}</span>
+        <span class="ind-vals">${isNaN(val)?'—':val}${ind.unit} · cible ${target}${ind.unit} · <strong style="color:${color}">${s}/100</strong></span>
+      </div>
+      <div class="ind-bar"><div class="ind-fill ${cls}" style="width:${s}%"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('profil-indicators').innerHTML = barsHtml;
+}
+</script>
+
+<script>
+// ===== MES BILANS =====
+function renderBilansTab() {
+  // History list
+  const listHtml = [...DEMO_BILANS].reverse().map(bi => {
+    const scores = calcScores(bi.mesures, bi.genre, bi.level);
+    const gs = calcGlobalScore(scores);
+    const sl = getScoreLabel(gs);
+    return`<div class="bh-item ${bi.id===selectedBilanId?'active':''}" onclick="selectBilan('${bi.id}')">
+      <div class="bh-item-top">
+        <div class="bh-item-date">${bi.date}</div>
+        <div class="bh-item-score" style="color:${sl.color}">${gs}</div>
+      </div>
+      <div class="bh-item-meta"><span class="badge n${bi.level}">N${bi.level}</span> · ${sl.label}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('bilan-history-list').innerHTML = listHtml;
+  renderBilanDetail(selectedBilanId);
+}
+
+function selectBilan(id) {
+  selectedBilanId = id;
+  document.querySelectorAll('.bh-item').forEach(el=>el.classList.toggle('active',el.querySelector('.bh-item-date')&&id===selectedBilanId));
+  // Re-mark active
+  const items = document.querySelectorAll('.bh-item');
+  // Find the one with matching id by re-rendering
+  renderBilansTab();
+}
+
+function renderBilanDetail(bilanId) {
+  const bi = DEMO_BILANS.find(b=>b.id===bilanId);
+  if(!bi){document.getElementById('bilan-detail-panel').innerHTML='<p style="color:var(--text3)">Sélectionnez un bilan</p>';return;}
+  const scores = calcScores(bi.mesures, bi.genre, bi.level);
+  const gs = calcGlobalScore(scores);
+  const sl = getScoreLabel(gs);
+  const bioAge = calcBioAge(bi.mesures.age||DEMO_USER.age, gs);
+  const bioDelta = bioAge-(bi.mesures.age||DEMO_USER.age);
+  const bioClass=bioDelta<0?'good':bioDelta>3?'bad':'neutral';
+  const bioText=bioDelta<0?`${Math.abs(bioDelta)} ans de moins`:'Dans la norme';
+  const inds = getIndicatorsForLevel(bi.level);
+
+  // Evolution vs previous bilan
+  const prevBilans = DEMO_BILANS.filter(b=>b.date<bi.date);
+  const prev = prevBilans.length ? prevBilans[prevBilans.length-1] : null;
+  let evoHtml = '';
+  if(prev){
+    const prevScores = calcScores(prev.mesures, prev.genre, prev.level);
+    const prevGs = calcGlobalScore(prevScores);
+    const diff = gs - prevGs;
+    const diffColor = diff>=0?'#27C191':'#ef4444';
+    evoHtml=`<div style="font-size:0.78rem;color:var(--text3);margin-bottom:8px">vs bilan précédent (${prev.date}) : <strong style="color:${diffColor}">${diff>=0?'+':''}${diff} pts</strong></div>`;
+  }
+
+  const barsHtml = inds.map(ind => {
+    const s = scores[ind.key]??0;
+    const val = bi.mesures[ind.key]??'—';
+    const target = getTargetValue(ind.key, DEMO_USER.genre);
+    const cls = s>=70?'green':s>=40?'orange':'red';
+    const color = s>=70?'#27C191':s>=40?'#f59e0b':'#ef4444';
+    // Evo arrow
+    let evo='';
+    if(prev){
+      const prevS=calcScores(prev.mesures,prev.genre,prev.level)[ind.key]??0;
+      const d=s-prevS;
+      evo=d>3?'<span style="color:#27C191">↑</span>':d<-3?'<span style="color:#ef4444">↓</span>':'<span style="color:#94a3b8">→</span>';
+    }
+    return`<div class="ind-row">
+      <div class="ind-top">
+        <span class="ind-name">${evo} ${ind.label}</span>
+        <span class="ind-vals">${isNaN(val)?'—':val}${ind.unit} · <strong style="color:${color}">${s}/100</strong></span>
+      </div>
+      <div class="ind-bar"><div class="ind-fill ${cls}" style="width:${s}%"></div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('bilan-detail-panel').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div style="text-align:center">
+        ${buildGaugeSVG(gs,sl.color,140)}
+        <div style="font-family:var(--font-h);font-size:2rem;font-weight:800;color:${sl.color};margin-top:-6px">${gs}</div>
+        <div style="font-family:var(--font-h);font-size:0.75rem;font-weight:700;color:${sl.color};text-transform:uppercase;letter-spacing:1px">${sl.label}</div>
+      </div>
+      <div>
+        <div class="bio-box" style="margin:0">
+          <div class="ba-lbl">Âge biologique</div>
+          <div class="ba-val" style="font-size:1.6rem">${bioAge} ans</div>
+          <div class="ba-delta ${bioClass}">${bioText}</div>
+        </div>
+        <div style="margin-top:10px;text-align:center">
+          <span class="badge n${bi.level}">N${bi.level}</span>
+          <span style="font-size:0.75rem;color:var(--text3);margin-left:6px">${bi.date}</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:16px">${buildRadarSVG(inds,scores,180)}</div>
+    <div class="section-title">Indicateurs</div>
+    ${evoHtml}
+    ${barsHtml}
+  `;
+}
+
+// ===== MON PROGRAMME =====
+function renderProgramme() {
+  const lastBilan = DEMO_BILANS[DEMO_BILANS.length-1];
+  const scores = calcScores(lastBilan.mesures, lastBilan.genre, lastBilan.level);
+  const gs = calcGlobalScore(scores);
+  const sl = getScoreLabel(gs);
+  const recos = buildRecos(scores, lastBilan.genre, lastBilan.level);
+
+  document.getElementById('prog-subtitle').textContent = `Basé sur votre bilan du ${lastBilan.date} · Score : ${gs}/100`;
+  document.getElementById('prog-score-chip').innerHTML = `<span class="profile-chip" style="background:${sl.color}20;color:${sl.color};border:1px solid ${sl.color}40">${sl.label}</span>`;
+
+  // Evolution chart (bar per bilan)
+  const evoHtml = DEMO_BILANS.map(bi => {
+    const s = calcScores(bi.mesures, bi.genre, bi.level);
+    const g = calcGlobalScore(s);
+    const sl2 = getScoreLabel(g);
+    const color = sl2.color;
+    return`<div class="evo-bar">
+      <div class="evo-label" style="font-size:0.68rem">${bi.date}</div>
+      <div class="evo-track">
+        <div class="evo-fill" style="width:${g}%;background:${color}">
+          <div class="evo-dot" style="background:${color}"></div>
+        </div>
+      </div>
+      <div class="evo-score" style="color:${color}">${g}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('prog-evo').innerHTML = `
+    <div class="section-title" style="margin-bottom:12px">Progression de votre score global</div>
+    ${evoHtml}`;
+
+  const recosHtml = `
+    <div class="reco-card"><h4>🏃 Entraînement</h4><ul>${recos.entrainement.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+    <div class="reco-card"><h4>🌿 Hygiène de vie</h4><ul>${recos.lifestyle.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+    <div class="reco-card"><h4>🎯 Objectifs J+90</h4><ul>${recos.objectifs.map(r=>`<li>${r}</li>`).join('')}</ul></div>`;
+  document.getElementById('prog-recos').innerHTML = recosHtml;
+}
+
+// ===== MON COACH =====
+function renderCoach() {
+  document.getElementById('coach-info').innerHTML = `
+    <div class="coach-avatar">JR</div>
+    <div class="coach-info" style="flex:1">
+      <div class="name">${DEMO_USER.coach}</div>
+      <div class="sub">Coach Wellness Training · ${DEMO_USER.club}</div>
+      <div style="font-size:0.72rem;color:var(--text3);margin-top:2px">Disponible lun–ven, 9h–18h</div>
+    </div>`;
+
+  renderMessages();
+}
+
+function renderMessages() {
+  const html = messages.map(m=>`
+    <div class="msg ${m.from}">
+      <div class="msg-sender">${m.from==='coach'?DEMO_USER.coach:'Moi'} · ${m.ts}</div>
+      ${m.text}
+    </div>`).join('');
+  const el = document.getElementById('msg-list');
+  el.innerHTML = html;
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendMsg() {
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const now = new Date();
+  const ts = now.getHours()+':'+(now.getMinutes()+'').padStart(2,'0');
+  messages.push({from:'me',text,ts});
+  input.value='';
+  renderMessages();
+  // Auto-reply after 1.5s
+  setTimeout(()=>{
+    const replies = [
+      "Bien noté ! Je prends en compte votre message.",
+      "Merci pour votre retour, Sophie. Continuez comme ça !",
+      "Très bien. N'hésitez pas si vous avez d'autres questions.",
+      "Super progression ! Je suis fier de vous."
+    ];
+    messages.push({from:'coach',text:replies[Math.floor(Math.random()*replies.length)],ts:(new Date().getHours())+':'+(new Date().getMinutes()+'').padStart(2,'0')});
+    renderMessages();
+  }, 1500);
+}
+
+function demanderBilan() {
+  document.getElementById('btn-rdv').disabled = true;
+  document.getElementById('rdv-confirm').style.display = 'block';
+  messages.push({from:'me',text:"Bonjour Julie, je souhaite programmer mon prochain bilan. Quelles sont vos disponibilités ?",ts:(new Date().getHours())+':'+(new Date().getMinutes()+'').padStart(2,'0')});
+  setTimeout(()=>{
+    messages.push({from:'coach',text:"Bonjour Sophie ! Je vais vérifier mon agenda et vous propose un rendez-vous rapidement. Merci pour votre message.",ts:(new Date().getHours())+':'+(new Date().getMinutes()+'').padStart(2,'0')});
+    renderMessages();
+  }, 2000);
+}
+</script>
+</body>
+</html>
