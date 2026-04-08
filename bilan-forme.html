@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bilan Forme | wellnesstraining</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#243744;--navy2:#1e2e3a;--navy3:#2d4556;
+  --blue:#1FA3F4;--blue2:#24B6FF;
+  --green:#27C191;
+  --violet:#7C0466;
+  --grey1:#426989;--grey2:#86A7BC;--grey3:#b0c8d8;
+  --grad:linear-gradient(135deg,#1FA3F4,#27C191);
+  --font-h:'Montserrat',sans-serif;
+  --font-b:'Barlow',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-b);background:var(--navy);color:#e8f4fd;min-height:100vh}
+
+/* ===== LOGIN ===== */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy2)}
+.login-box{background:var(--navy3);border-radius:16px;padding:40px;width:380px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo .w-icon{display:inline-flex;gap:3px;align-items:flex-end;margin-bottom:8px}
+.login-logo .w-icon span{width:8px;border-radius:3px 3px 0 0;background:var(--grad)}
+.login-logo .w-icon span:nth-child(1){height:28px}
+.login-logo .w-icon span:nth-child(2){height:20px}
+.login-logo .w-icon span:nth-child(3){height:32px}
+.login-logo .w-icon span:nth-child(4){height:20px}
+.login-logo .w-icon span:nth-child(5){height:28px}
+.login-logo h1{font-family:var(--font-h);font-size:1.1rem;font-weight:700;letter-spacing:2px;color:#e8f4fd;text-transform:uppercase}
+.login-logo p{font-size:0.75rem;color:var(--grey2);margin-top:2px}
+.login-box h2{font-family:var(--font-h);font-size:1rem;font-weight:600;margin-bottom:20px;color:var(--grey3)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--grey2);margin-bottom:6px}
+.form-group input,.form-group select{width:100%;background:var(--navy2);border:1px solid var(--grey1);border-radius:8px;padding:10px 14px;color:#e8f4fd;font-family:var(--font-b);font-size:0.95rem;outline:none;transition:border .2s}
+.form-group input:focus,.form-group select:focus{border-color:var(--blue)}
+.btn-primary{width:100%;background:var(--grad);border:none;border-radius:8px;padding:12px;color:#fff;font-family:var(--font-h);font-size:0.9rem;font-weight:700;letter-spacing:1px;cursor:pointer;transition:opacity .2s}
+.btn-primary:hover{opacity:.9}
+.demo-accounts{margin-top:20px}
+.demo-accounts p{font-size:0.75rem;color:var(--grey2);margin-bottom:8px}
+.demo-chips{display:flex;flex-wrap:wrap;gap:6px}
+.demo-chip{background:var(--navy2);border:1px solid var(--grey1);border-radius:20px;padding:4px 12px;font-size:0.75rem;color:var(--grey3);cursor:pointer;transition:all .2s}
+.demo-chip:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ===== APP SHELL ===== */
+#app{display:none;flex-direction:column;min-height:100vh}
+header{background:var(--navy2);border-bottom:1px solid var(--grey1);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;flex-shrink:0}
+.header-logo{display:flex;align-items:center;gap:10px}
+.header-logo .w-icon{display:inline-flex;gap:2px;align-items:flex-end}
+.header-logo .w-icon span{width:5px;border-radius:2px 2px 0 0;background:var(--grad)}
+.header-logo .w-icon span:nth-child(1){height:16px}
+.header-logo .w-icon span:nth-child(2){height:11px}
+.header-logo .w-icon span:nth-child(3){height:19px}
+.header-logo .w-icon span:nth-child(4){height:11px}
+.header-logo .w-icon span:nth-child(5){height:16px}
+.header-logo h1{font-family:var(--font-h);font-size:0.95rem;font-weight:700;letter-spacing:1px;color:#e8f4fd}
+.header-logo span.sep{color:var(--grey1);margin:0 4px}
+.header-logo span.app-name{font-family:var(--font-h);font-size:0.85rem;color:var(--blue);font-weight:600}
+.header-user{display:flex;align-items:center;gap:12px}
+.header-user .user-info{text-align:right}
+.header-user .user-name{font-size:0.85rem;font-weight:600;color:#e8f4fd}
+.header-user .user-club{font-size:0.72rem;color:var(--grey2)}
+.btn-logout{background:transparent;border:1px solid var(--grey1);border-radius:6px;padding:5px 10px;color:var(--grey2);font-size:0.75rem;cursor:pointer;transition:all .2s}
+.btn-logout:hover{border-color:var(--blue);color:var(--blue)}
+
+nav{background:var(--navy2);border-bottom:1px solid rgba(66,105,137,0.4);padding:0 24px;display:flex;gap:4px}
+.nav-tab{padding:12px 20px;font-family:var(--font-h);font-size:0.8rem;font-weight:600;letter-spacing:0.5px;color:var(--grey2);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;text-transform:uppercase}
+.nav-tab:hover{color:var(--blue)}
+.nav-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+main{flex:1;padding:24px;max-width:1200px;width:100%;margin:0 auto}
+
+/* ===== DASHBOARD ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--navy3);border-radius:12px;padding:20px;border:1px solid rgba(66,105,137,0.3)}
+.stat-card .stat-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--grey2);font-family:var(--font-h);font-weight:600;margin-bottom:8px}
+.stat-card .stat-value{font-family:var(--font-h);font-size:2rem;font-weight:800;color:#e8f4fd}
+.stat-card .stat-sub{font-size:0.75rem;color:var(--grey2);margin-top:4px}
+.stat-card.alert .stat-value{color:#ff6b6b}
+.alert-banner{background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.4);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:0.85rem}
+.alert-banner .alert-icon{font-size:1.2rem}
+.section-title{font-family:var(--font-h);font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--grey2);margin-bottom:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}}
+.card{background:var(--navy3);border-radius:12px;padding:20px;border:1px solid rgba(66,105,137,0.3)}
+.bilan-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(66,105,137,0.2)}
+.bilan-row:last-child{border-bottom:none}
+.bilan-row .name{font-weight:600;font-size:0.9rem}
+.bilan-row .meta{font-size:0.75rem;color:var(--grey2);margin-top:2px}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:600;font-family:var(--font-h)}
+.badge.n1{background:rgba(31,163,244,0.2);color:var(--blue)}
+.badge.n2{background:rgba(39,193,145,0.2);color:var(--green)}
+.badge.n3{background:rgba(124,4,102,0.2);color:#d44bc4}
+.badge.n4{background:rgba(255,193,7,0.2);color:#ffc107}
+.badge.overdue{background:rgba(255,107,107,0.2);color:#ff6b6b}
+.badge.upcoming{background:rgba(31,163,244,0.15);color:var(--blue2)}
+.badge.ok{background:rgba(39,193,145,0.15);color:var(--green)}
+.score-chip{font-family:var(--font-h);font-size:0.85rem;font-weight:700}
+.score-chip.high{color:var(--green)}
+.score-chip.mid{color:#ffc107}
+.score-chip.low{color:#ff6b6b}
+
+/* ===== BENEFICIAIRES ===== */
+.search-bar{display:flex;gap:10px;margin-bottom:20px}
+.search-bar input{flex:1;background:var(--navy3);border:1px solid var(--grey1);border-radius:8px;padding:10px 14px;color:#e8f4fd;font-family:var(--font-b);font-size:0.9rem;outline:none}
+.search-bar input:focus{border-color:var(--blue)}
+.btn-add{background:var(--grad);border:none;border-radius:8px;padding:10px 18px;color:#fff;font-family:var(--font-h);font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.benef-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.benef-card{background:var(--navy3);border-radius:12px;padding:18px;border:1px solid rgba(66,105,137,0.3);cursor:pointer;transition:all .2s}
+.benef-card:hover{border-color:var(--blue);transform:translateY(-2px)}
+.benef-card .benef-name{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:4px}
+.benef-card .benef-info{font-size:0.78rem;color:var(--grey2);margin-bottom:12px}
+.benef-card .benef-stats{display:flex;align-items:center;justify-content:space-between}
+.benef-card .score-big{font-family:var(--font-h);font-size:1.6rem;font-weight:800}
+.benef-card .score-label{font-size:0.7rem;color:var(--grey2);font-family:var(--font-h)}
+
+/* ===== FICHE BENEFICIAIRE ===== */
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--grey2);font-family:var(--font-h);font-size:0.8rem;cursor:pointer;margin-bottom:20px;padding:0}
+.back-btn:hover{color:var(--blue)}
+.fiche-header{background:var(--navy3);border-radius:12px;padding:20px;border:1px solid rgba(66,105,137,0.3);margin-bottom:20px;display:flex;align-items:center;gap:20px}
+.fiche-avatar{width:60px;height:60px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:1.4rem;font-weight:800;color:#fff;flex-shrink:0}
+.fiche-name{font-family:var(--font-h);font-size:1.3rem;font-weight:800}
+.fiche-meta{font-size:0.8rem;color:var(--grey2);margin-top:4px}
+.fiche-body{display:grid;grid-template-columns:300px 1fr;gap:20px}
+@media(max-width:900px){.fiche-body{grid-template-columns:1fr}}
+.bilan-history-list .bh-item{padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid rgba(66,105,137,0.2);transition:all .2s}
+.bilan-history-list .bh-item:hover,.bilan-history-list .bh-item.active{background:rgba(31,163,244,0.1);border-color:var(--blue)}
+.bh-item .bh-date{font-size:0.78rem;font-weight:600;font-family:var(--font-h)}
+.bh-item .bh-meta{font-size:0.7rem;color:var(--grey2);margin-top:2px}
+.fiche-detail{background:var(--navy3);border-radius:12px;padding:20px;border:1px solid rgba(66,105,137,0.3)}
+
+/* ===== GAUGE ===== */
+.gauge-wrap{text-align:center;padding:20px 0}
+.gauge-score{font-family:var(--font-h);font-size:2.5rem;font-weight:800;line-height:1}
+.gauge-label{font-size:0.8rem;color:var(--grey2);margin-top:4px;font-family:var(--font-h);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.bio-age-box{background:var(--navy2);border-radius:10px;padding:14px;margin:16px 0;text-align:center}
+.bio-age-box .ba-val{font-family:var(--font-h);font-size:1.8rem;font-weight:800}
+.bio-age-box .ba-label{font-size:0.72rem;color:var(--grey2);text-transform:uppercase;letter-spacing:1px;font-family:var(--font-h)}
+.bio-age-box .ba-delta{font-size:0.85rem;font-weight:600;margin-top:4px}
+.ba-delta.good{color:var(--green)}
+.ba-delta.bad{color:#ff6b6b}
+.ba-delta.neutral{color:var(--grey2)}
+
+/* ===== RADAR ===== */
+.radar-wrap{display:flex;justify-content:center;padding:10px 0}
+.radar-wrap svg{overflow:visible}
+
+/* ===== INDICATORS ===== */
+.indicator-list{margin-top:8px}
+.ind-row{margin-bottom:14px}
+.ind-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.ind-name{font-size:0.8rem;font-weight:600;font-family:var(--font-h);color:var(--grey3)}
+.ind-vals{font-size:0.72rem;color:var(--grey2)}
+.ind-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.ind-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.ind-fill.green{background:var(--green)}
+.ind-fill.orange{background:#ffc107}
+.ind-fill.red{background:#ff6b6b}
+
+/* ===== RECOMMENDATIONS ===== */
+.reco-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:16px}
+.reco-card{background:var(--navy2);border-radius:10px;padding:14px;border:1px solid rgba(66,105,137,0.2)}
+.reco-card h4{font-family:var(--font-h);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;color:var(--blue)}
+.reco-card ul{list-style:none;padding:0}
+.reco-card li{font-size:0.78rem;color:var(--grey3);padding:4px 0;border-bottom:1px solid rgba(66,105,137,0.15);line-height:1.4}
+.reco-card li:last-child{border-bottom:none}
+.reco-card li::before{content:"→ ";color:var(--green);font-weight:700}
+
+/* ===== FORM ===== */
+.steps{display:flex;gap:8px;margin-bottom:24px}
+.step{flex:1;text-align:center;padding:10px;border-radius:8px;background:var(--navy3);border:1px solid rgba(66,105,137,0.2);font-family:var(--font-h);font-size:0.75rem;font-weight:600;color:var(--grey2)}
+.step.active{background:rgba(31,163,244,0.1);border-color:var(--blue);color:var(--blue)}
+.step.done{background:rgba(39,193,145,0.1);border-color:var(--green);color:var(--green)}
+.form-card{background:var(--navy3);border-radius:12px;padding:24px;border:1px solid rgba(66,105,137,0.3)}
+.form-card h3{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:20px;color:var(--blue)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:0}
+.form-group.span2{grid-column:span 2}
+.form-group .auto-calc{background:rgba(39,193,145,0.1);border-color:var(--green);color:var(--green);cursor:default}
+.level-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px}
+@media(max-width:600px){.level-cards{grid-template-columns:1fr}}
+.level-card{background:var(--navy2);border:2px solid rgba(66,105,137,0.3);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.level-card:hover{border-color:var(--blue)}
+.level-card.selected{border-color:var(--blue);background:rgba(31,163,244,0.1)}
+.level-card .lc-num{font-family:var(--font-h);font-size:1.3rem;font-weight:800;color:var(--blue);margin-bottom:4px}
+.level-card .lc-name{font-size:0.85rem;font-weight:600;margin-bottom:4px}
+.level-card .lc-desc{font-size:0.72rem;color:var(--grey2);line-height:1.4}
+.section-sep{font-family:var(--font-h);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid rgba(31,163,244,0.3)}
+.form-nav{display:flex;justify-content:space-between;margin-top:20px}
+.btn-secondary{background:transparent;border:1px solid var(--grey1);border-radius:8px;padding:10px 20px;color:var(--grey3);font-family:var(--font-h);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{border-color:var(--blue);color:var(--blue)}
+.radio-group{display:flex;gap:12px}
+.radio-opt{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.88rem}
+.radio-opt input{accent-color:var(--blue)}
+
+/* ===== RESULTS ===== */
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.results-header h2{font-family:var(--font-h);font-size:1.2rem;font-weight:800}
+.pdf-btns{display:flex;gap:8px}
+.btn-pdf{background:transparent;border:1px solid var(--grey1);border-radius:6px;padding:7px 14px;color:var(--grey3);font-size:0.78rem;font-family:var(--font-h);font-weight:600;cursor:pointer;transition:all .2s}
+.btn-pdf:hover{border-color:var(--blue);color:var(--blue)}
+.results-grid{display:grid;grid-template-columns:280px 1fr;gap:20px}
+@media(max-width:800px){.results-grid{grid-template-columns:1fr}}
+.results-left{display:flex;flex-direction:column;gap:16px}
+.results-right .tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid rgba(66,105,137,0.3)}
+.results-right .tab{padding:8px 16px;font-family:var(--font-h);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--grey2);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.results-right .tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* ===== PLANIFICATEUR ===== */
+.plan-filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.plan-filter{background:var(--navy3);border:1px solid rgba(66,105,137,0.3);border-radius:20px;padding:5px 14px;font-size:0.78rem;font-family:var(--font-h);font-weight:600;color:var(--grey2);cursor:pointer;transition:all .2s}
+.plan-filter.active{background:rgba(31,163,244,0.15);border-color:var(--blue);color:var(--blue)}
+.plan-row{background:var(--navy3);border-radius:10px;padding:14px 18px;margin-bottom:10px;border:1px solid rgba(66,105,137,0.2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.plan-row.overdue{border-color:rgba(255,107,107,0.4);background:rgba(255,107,107,0.05)}
+.plan-row .plan-name{font-weight:600;font-size:0.9rem}
+.plan-row .plan-meta{font-size:0.75rem;color:var(--grey2);margin-top:2px}
+.plan-row .plan-actions{display:flex;gap:6px;align-items:center}
+.btn-small{background:transparent;border:1px solid var(--grey1);border-radius:6px;padding:4px 10px;color:var(--grey2);font-size:0.72rem;font-family:var(--font-h);font-weight:600;cursor:pointer;transition:all .2s}
+.btn-small:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ===== PRINT ===== */
+@media print{
+  #login-screen,nav,header,.back-btn,.pdf-btns,.form-nav,.results-header .pdf-btns,.plan-filters,.search-bar,.btn-add,.btn-logout{display:none!important}
+  body{background:#fff;color:#111}
+  .card,.fiche-detail,.results-left,.form-card,.stat-card{background:#fff!important;border:1px solid #ddd!important}
+  .results-grid{grid-template-columns:1fr!important}
+  .print-header{display:block!important}
+}
+.print-header{display:none;padding:16px 0;border-bottom:3px solid #1FA3F4;margin-bottom:20px}
+.print-header h1{font-family:var(--font-h);font-size:1.4rem;color:#243744}
+.print-header p{font-size:0.85rem;color:#666}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="w-icon"><span></span><span></span><span></span><span></span><span></span></div>
+      <h1>wellnesstraining</h1>
+      <p>Bilan Forme — Espace Coach</p>
+    </div>
+    <h2>Connexion</h2>
+    <div class="form-group"><label>Identifiant</label><input id="login-user" type="text" placeholder="julie.r"></div>
+    <div class="form-group"><label>Mot de passe</label><input id="login-pass" type="password" placeholder="••••••••"></div>
+    <p id="login-err" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:10px;display:none">Identifiant ou mot de passe incorrect</p>
+    <button class="btn-primary" onclick="doLogin()">Se connecter</button>
+    <div class="demo-accounts">
+      <p>Comptes démo :</p>
+      <div class="demo-chips">
+        <span class="demo-chip" onclick="fillDemo('julie.r','wellness2024')">julie.r — Coach Paris 7</span>
+        <span class="demo-chip" onclick="fillDemo('marc.t','wellness2024')">marc.t — Coach Paris 7</span>
+        <span class="demo-chip" onclick="fillDemo('alex.k','wellness2024')">alex.k — Coach La Défense</span>
+        <span class="demo-chip" onclick="fillDemo('admin','admin2024')">admin — Admin</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+  <header>
+    <div class="header-logo">
+      <div class="w-icon"><span></span><span></span><span></span><span></span><span></span></div>
+      <h1>wellnesstraining</h1>
+      <span class="sep">|</span>
+      <span class="app-name">Bilan Forme</span>
+    </div>
+    <div class="header-user">
+      <div class="user-info">
+        <div class="user-name" id="header-user-name">—</div>
+        <div class="user-club" id="header-user-club">—</div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </header>
+  <nav>
+    <div class="nav-tab active" onclick="showTab('dashboard',this)">📊 Dashboard</div>
+    <div class="nav-tab" onclick="showTab('beneficiaires',this)">👥 Bénéficiaires</div>
+    <div class="nav-tab" onclick="showTab('nouveau-bilan',this)">➕ Nouveau Bilan</div>
+    <div class="nav-tab" onclick="showTab('planificateur',this)">📅 Planificateur</div>
+  </nav>
+  <main>
+
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard">
+      <div id="alert-banner" class="alert-banner" style="display:none">
+        <span class="alert-icon">⚠️</span>
+        <span id="alert-text"></span>
+      </div>
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="two-col">
+        <div class="card">
+          <div class="section-title">Bilans récents</div>
+          <div id="recent-bilans"></div>
+        </div>
+        <div class="card">
+          <div class="section-title">Bilans à venir</div>
+          <div id="upcoming-bilans"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICIAIRES -->
+    <section id="tab-beneficiaires" style="display:none">
+      <div id="benef-list-view">
+        <div class="search-bar">
+          <input type="text" id="benef-search" placeholder="Rechercher un bénéficiaire…" oninput="renderBenefList()">
+          <button class="btn-add" onclick="showTab('nouveau-bilan',null)">+ Nouveau bilan</button>
+        </div>
+        <div class="benef-grid" id="benef-grid"></div>
+      </div>
+      <div id="benef-fiche-view" style="display:none"></div>
+    </section>
+
+    <!-- NOUVEAU BILAN -->
+    <section id="tab-nouveau-bilan" style="display:none">
+      <div id="bilan-form-wrap"></div>
+      <div id="bilan-results-wrap" style="display:none"></div>
+    </section>
+
+    <!-- PLANIFICATEUR -->
+    <section id="tab-planificateur" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+        <div class="plan-filters">
+          <span class="plan-filter active" onclick="setPlanFilter('all',this)">Tous</span>
+          <span class="plan-filter" onclick="setPlanFilter('overdue',this)">En retard</span>
+          <span class="plan-filter" onclick="setPlanFilter('week',this)">Cette semaine</span>
+          <span class="plan-filter" onclick="setPlanFilter('upcoming',this)">À venir</span>
+        </div>
+        <button class="btn-add" onclick="showScheduleModal()">+ Planifier un bilan</button>
+      </div>
+      <div id="plan-list"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- SCHEDULE MODAL -->
+<div id="schedule-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center">
+  <div style="background:#2d4556;border-radius:14px;padding:28px;width:400px;max-width:95vw">
+    <h3 style="font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:20px;color:var(--blue)">Planifier un bilan</h3>
+    <div class="form-group"><label>Bénéficiaire</label><select id="plan-benef" style="width:100%;background:#243744;border:1px solid #426989;border-radius:8px;padding:10px 14px;color:#e8f4fd;font-family:var(--font-b);font-size:0.9rem;outline:none"></select></div>
+    <div class="form-group" style="margin-top:12px"><label>Date prévue</label><input type="date" id="plan-date" style="width:100%;background:#243744;border:1px solid #426989;border-radius:8px;padding:10px 14px;color:#e8f4fd;font-family:var(--font-b);font-size:0.9rem;outline:none"></div>
+    <div class="form-group" style="margin-top:12px"><label>Niveau</label><select id="plan-level" style="width:100%;background:#243744;border:1px solid #426989;border-radius:8px;padding:10px 14px;color:#e8f4fd;font-family:var(--font-b);font-size:0.9rem;outline:none"><option value="1">Niveau 1 — Basique</option><option value="2">Niveau 2 — InBody</option><option value="3">Niveau 3 — eGym</option><option value="4">Niveau 4 — Complet</option></select></div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn-secondary" style="flex:1" onclick="closeModal()">Annuler</button>
+      <button class="btn-primary" style="width:auto;flex:1" onclick="saveSchedule()">Planifier</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const ACCOUNTS = {
+  'julie.r': {password:'wellness2024', name:'Julie Rousseau', club:'Paris 7', role:'coach'},
+  'marc.t':  {password:'wellness2024', name:'Marc Tavernier', club:'Paris 7', role:'coach'},
+  'alex.k':  {password:'wellness2024', name:'Alex Kowalski',  club:'La Défense', role:'coach'},
+  'admin':   {password:'admin2024',    name:'Admin',          club:'Tous clubs', role:'admin'}
+};
+
+// Scoring logic
+function scoreIndicator(key, value, genre) {
+  const v = parseFloat(value);
+  if (isNaN(v)) return null;
+  const H = (genre === 'M');
+  switch(key) {
+    case 'tourTaille':
+      const ideal_tt = H ? 94 : 80;
+      return Math.max(0, Math.min(100, 100 - Math.max(0, v - ideal_tt) * 3));
+    case 'imc':
+      return Math.max(0, Math.min(100, 100 - Math.abs(v - 22) * 8));
+    case 'handgrip':
+      return Math.min(100, (v / (H ? 45 : 30)) * 100);
+    case 'souplesse':
+      return Math.min(100, Math.max(0, 50 + v * 2));
+    case 'equilibre':
+      return Math.min(100, (v / 30) * 100);
+    case 'marche6':
+      return Math.min(100, (v / 500) * 100);
+    case 'masseGrasse':
+      const ideal_mg = H ? 20 : 30;
+      return Math.max(0, Math.min(100, 100 - Math.max(0, v - ideal_mg) * 4));
+    case 'masseMusc':
+      return Math.min(100, (v / (H ? 38 : 26)) * 100);
+    case 'eau':
+      const ideal_eau = H ? 60 : 55;
+      return Math.max(0, Math.min(100, 100 - Math.abs(v - ideal_eau) * 3));
+    case 'mobiliteGym':
+    case 'forceGym':
+      return Math.min(100, Math.max(0, v));
+    case 'vo2max':
+      return Math.min(100, (v / (H ? 50 : 42)) * 100);
+    case 'jumpTest':
+      return Math.min(100, (v / 40) * 100);
+    default: return 50;
+  }
+}
+
+function getIndicatorsForLevel(level) {
+  const base = [
+    {key:'tourTaille', label:'Tour de taille', unit:'cm'},
+    {key:'imc',        label:'IMC', unit:''},
+    {key:'handgrip',   label:'Handgrip', unit:'kg'},
+    {key:'souplesse',  label:'Souplesse', unit:'cm'},
+    {key:'equilibre',  label:'Équilibre', unit:'s'},
+    {key:'marche6',    label:'Marche 6 min', unit:'m'}
+  ];
+  const n2 = [
+    {key:'masseGrasse', label:'Masse grasse', unit:'%'},
+    {key:'masseMusc',   label:'Masse musculaire', unit:'kg'},
+    {key:'eau',         label:'Eau corporelle', unit:'%'}
+  ];
+  const n3 = [
+    {key:'mobiliteGym', label:'Mobilité eGym', unit:'/100'},
+    {key:'forceGym',    label:'Force eGym', unit:'/100'},
+    {key:'vo2max',      label:'VO₂ max', unit:'ml/kg/min'}
+  ];
+  const n4 = [
+    {key:'jumpTest', label:'Jump Test', unit:'cm'}
+  ];
+  let inds = [...base];
+  if (level >= 2) inds = [...inds, ...n2];
+  if (level >= 3) inds = [...inds, ...n3];
+  if (level >= 4) inds = [...inds, ...n4];
+  return inds;
+}
+
+function calcScores(mesures, genre, level) {
+  const inds = getIndicatorsForLevel(level);
+  const scores = {};
+  inds.forEach(ind => {
+    const s = scoreIndicator(ind.key, mesures[ind.key], genre);
+    if (s !== null) scores[ind.key] = Math.round(s);
+  });
+  return scores;
+}
+
+function calcGlobalScore(scores) {
+  const vals = Object.values(scores).filter(v => v !== null);
+  if (!vals.length) return 0;
+  return Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
+}
+
+function getScoreLabel(s) {
+  if (s >= 80) return {label:'Athlétique', color:'#27C191'};
+  if (s >= 60) return {label:'Actif', color:'#1FA3F4'};
+  if (s >= 40) return {label:'Modéré', color:'#ffc107'};
+  if (s >= 20) return {label:'Sédentaire', color:'#ff8c42'};
+  return {label:'À risque', color:'#ff6b6b'};
+}
+
+function calcBioAge(chronoAge, globalScore) {
+  return Math.round(chronoAge + (50 - globalScore) * 0.3);
+}
+
+function getTargetValue(key, genre) {
+  const H = (genre === 'M');
+  const targets = {
+    tourTaille: H ? 94 : 80,
+    imc: 22,
+    handgrip: H ? 45 : 30,
+    souplesse: 5,
+    equilibre: 30,
+    marche6: 500,
+    masseGrasse: H ? 18 : 27,
+    masseMusc: H ? 38 : 26,
+    eau: H ? 60 : 55,
+    mobiliteGym: 75,
+    forceGym: 75,
+    vo2max: H ? 50 : 42,
+    jumpTest: 40
+  };
+  return targets[key] || '—';
+}
+
+// Recommendations
+function buildRecos(scores, mesures, genre, level) {
+  const inds = getIndicatorsForLevel(level);
+  const weak = inds.filter(i => scores[i.key] !== undefined && scores[i.key] < 60)
+    .sort((a,b) => scores[a.key] - scores[b.key]);
+  const recoMap = {
+    tourTaille: {entrainement:'Cardio zone 2 : 3×45 min/sem. Marche rapide ou vélo', lifestyle:'Réduire sucres ajoutés et alcool. Manger lentement.', objectif:'Réduire le tour de taille de 2-3 cm en 3 mois'},
+    imc: {entrainement:'Renforcement musculaire 2×/sem + cardio modéré 3×/sem', lifestyle:'Déficit calorique modéré : -300 kcal/j. Privilégier protéines.', objectif:'Atteindre IMC entre 21 et 23'},
+    handgrip: {entrainement:'Circuit grip 3×/sem : farmer walk, dead hang, squeeze ball', lifestyle:'Apport protéique suffisant : 1.6 g/kg/j', objectif:'Améliorer le grip de 5 kg en 3 mois'},
+    souplesse: {entrainement:'15 min étirements quotidiens. Yoga 1×/sem.', lifestyle:'Foam roller après chaque séance. Hydratation suffisante.', objectif:'Atteindre +5 cm au sit-and-reach'},
+    equilibre: {entrainement:'Exercices unipodaux 5 min/j. BOSU, Pilates.', lifestyle:'Marche pieds nus, proprioception au quotidien.', objectif:'Tenir 30 secondes en équilibre monopodal'},
+    marche6: {entrainement:'Programme marche progressive : +50 m/sem', lifestyle:'10 000 pas/jour. Limiter la sédentarité.', objectif:'Dépasser 500 m au test de marche 6 min'},
+    masseGrasse: {entrainement:'Musculation 3×/sem (dépense calorique + maintien masse maigre)', lifestyle:'Sommeil 7-8h. Stress : cortisol favorise le stockage.', objectif:'Réduire masse grasse de 2-3 % en 3 mois'},
+    masseMusc: {entrainement:'Renforcement progressif : charges, TRX ou poids du corps', lifestyle:'Protéines à chaque repas : œufs, légumineuses, poisson', objectif:'Gagner 1-2 kg de masse musculaire'},
+    mobiliteGym: {entrainement:'Travail mobilité articulaire quotidien 10-15 min', lifestyle:'Étirements actifs matin et soir', objectif:'Score mobilité eGym > 75/100'},
+    forceGym: {entrainement:'Programme force : 3×/sem progressif sur machines eGym', lifestyle:'Récupération active, sommeil suffisant', objectif:'Score force eGym > 75/100'},
+    vo2max: {entrainement:'HIIT 2×/sem : 8×1 min intensité max / 1 min récup', lifestyle:'Actif tous les jours : escaliers, marche, vélo', objectif:'VO₂ max > 45 ml/kg/min'},
+    jumpTest: {entrainement:'Pliométrie 2×/sem : box jump, squat jump, burpees', lifestyle:'Alimentation : créatine + glucides avant séance', objectif:'Jump test > 40 cm'}
+  };
+
+  const entrainement = [];
+  const lifestyle = [];
+  const objectifs = [];
+
+  weak.slice(0,4).forEach(i => {
+    const r = recoMap[i.key];
+    if (r) {
+      if (!entrainement.includes(r.entrainement)) entrainement.push(r.entrainement);
+      if (!lifestyle.includes(r.lifestyle)) lifestyle.push(r.lifestyle);
+      objectifs.push(r.objectif);
+    }
+  });
+
+  if (!entrainement.length) entrainement.push('Maintenir votre niveau actuel avec 3 séances/semaine');
+  if (!lifestyle.length) lifestyle.push('Hygiène de vie globale : sommeil 7-8h, hydratation 1.5-2L/j');
+  if (!objectifs.length) objectifs.push('Conserver tous vos indicateurs au-dessus de 70/100');
+
+  return {entrainement, lifestyle, objectifs};
+}
+
+// ============================================================
+// STORAGE
+// ============================================================
+function loadBenefs() {
+  try { return JSON.parse(localStorage.getItem('wt_beneficiaires') || '[]'); }
+  catch(e) { return []; }
+}
+function saveBenefs(b) { localStorage.setItem('wt_beneficiaires', JSON.stringify(b)); }
+function loadBilans() {
+  try { return JSON.parse(localStorage.getItem('wt_bilans') || '[]'); }
+  catch(e) { return []; }
+}
+function saveBilans(b) { localStorage.setItem('wt_bilans', JSON.stringify(b)); }
+function loadPlan() {
+  try { return JSON.parse(localStorage.getItem('wt_plan') || '[]'); }
+  catch(e) { return []; }
+}
+function savePlan(p) { localStorage.setItem('wt_plan', JSON.stringify(p)); }
+
+function initDemoData() {
+  if (loadBenefs().length > 0) return;
+  const benefs = [
+    {id:'b1', prenom:'Sophie', nom:'Martin', age:34, genre:'F', club:'Paris 7', coach:'julie.r'},
+    {id:'b2', prenom:'Thomas', nom:'Dubois', age:42, genre:'M', club:'Paris 7', coach:'marc.t'},
+    {id:'b3', prenom:'Camille', nom:'Rousseau', age:28, genre:'F', club:'La Défense', coach:'alex.k'},
+    {id:'b4', prenom:'Marc', nom:'Bernard', age:55, genre:'M', club:'Paris 7', coach:'marc.t'}
+  ];
+  const bilans = [
+    {id:'bi1',benefId:'b1',date:'2024-09-15',level:2,mesures:{tourTaille:82,poids:63,taille:167,handgrip:26,souplesse:8,equilibre:22,marche6:430,masseGrasse:28,masseMusc:24,eau:52},genre:'F',coach:'julie.r'},
+    {id:'bi2',benefId:'b1',date:'2024-12-10',level:2,mesures:{tourTaille:79,poids:61,taille:167,handgrip:29,souplesse:12,equilibre:28,marche6:470,masseGrasse:25,masseMusc:25,eau:54},genre:'F',coach:'julie.r'},
+    {id:'bi3',benefId:'b2',date:'2024-07-20',level:3,mesures:{tourTaille:98,poids:88,taille:178,handgrip:38,souplesse:-3,equilibre:18,marche6:410,masseGrasse:26,masseMusc:34,eau:58,mobiliteGym:55,forceGym:62,vo2max:36},genre:'M',coach:'marc.t'},
+    {id:'bi4',benefId:'b2',date:'2024-11-15',level:3,mesures:{tourTaille:95,poids:85,taille:178,handgrip:42,souplesse:2,equilibre:24,marche6:460,masseGrasse:23,masseMusc:36,eau:61,mobiliteGym:65,forceGym:70,vo2max:40},genre:'M',coach:'marc.t'},
+    {id:'bi5',benefId:'b3',date:'2024-10-01',level:4,mesures:{tourTaille:68,poids:58,taille:170,handgrip:34,souplesse:18,equilibre:45,marche6:590,masseGrasse:19,masseMusc:28,eau:58,mobiliteGym:84,forceGym:79,vo2max:52,jumpTest:42},genre:'F',coach:'alex.k'},
+    {id:'bi6',benefId:'b4',date:'2024-06-10',level:1,mesures:{tourTaille:104,poids:94,taille:172,handgrip:32,souplesse:-8,equilibre:12,marche6:350},genre:'M',coach:'marc.t'}
+  ];
+  const plan = [
+    {id:'p1',benefId:'b4',date:'2024-09-10',level:1,coach:'marc.t',status:'overdue'},
+    {id:'p2',benefId:'b1',date:'2025-03-15',level:2,coach:'julie.r',status:'upcoming'},
+    {id:'p3',benefId:'b2',date:'2025-02-20',level:3,coach:'marc.t',status:'upcoming'}
+  ];
+  // calc scores and global for each bilan
+  bilans.forEach(b => {
+    b.scores = calcScores(b.mesures, b.genre, b.level);
+    b.globalScore = calcGlobalScore(b.scores);
+  });
+  saveBenefs(benefs);
+  saveBilans(bilans);
+  savePlan(plan);
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+let currentUser = null;
+
+function fillDemo(u, p) {
+  document.getElementById('login-user').value = u;
+  document.getElementById('login-pass').value = p;
+}
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const acc = ACCOUNTS[u];
+  if (acc && acc.password === p) {
+    currentUser = {login: u, ...acc};
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('header-user-name').textContent = acc.name;
+    document.getElementById('header-user-club').textContent = acc.club;
+    renderDashboard();
+    document.getElementById('login-err').style.display = 'none';
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+});
+
+function doLogout() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showTab(id, el) {
+  document.querySelectorAll('section[id^="tab-"]').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).style.display = 'block';
+  if (el) el.classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'beneficiaires') { renderBenefList(); document.getElementById('benef-list-view').style.display='block'; document.getElementById('benef-fiche-view').style.display='none'; }
+  if (id === 'nouveau-bilan') renderBilanForm();
+  if (id === 'planificateur') renderPlanificateur();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const benefs = loadBenefs();
+  const bilans = loadBilans();
+  const plan = loadPlan();
+  const today = new Date();
+  const overdue = plan.filter(p => new Date(p.date) < today && p.status !== 'done');
+
+  if (overdue.length > 0) {
+    document.getElementById('alert-banner').style.display = 'flex';
+    const names = overdue.map(p => {
+      const b = benefs.find(b => b.id === p.benefId);
+      return b ? b.prenom + ' ' + b.nom : '?';
+    });
+    document.getElementById('alert-text').textContent = overdue.length + ' bilan(s) en retard : ' + names.join(', ');
+  }
+
+  const thisMonth = bilans.filter(b => {
+    const d = new Date(b.date);
+    return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+  });
+  const avgScore = bilans.length ? Math.round(bilans.reduce((a,b) => a + (b.globalScore||0), 0) / bilans.length) : 0;
+
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Bénéficiaires</div><div class="stat-value">${benefs.length}</div><div class="stat-sub">inscrits</div></div>
+    <div class="stat-card"><div class="stat-label">Bilans ce mois</div><div class="stat-value">${thisMonth.length}</div><div class="stat-sub">réalisés</div></div>
+    <div class="stat-card"><div class="stat-label">Score moyen</div><div class="stat-value">${avgScore}</div><div class="stat-sub">/100</div></div>
+    <div class="stat-card ${overdue.length?'alert':''}"><div class="stat-label">Bilans en retard</div><div class="stat-value">${overdue.length}</div><div class="stat-sub">à planifier</div></div>
+  `;
+
+  const recentHtml = bilans.slice().sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,5).map(bi => {
+    const ben = benefs.find(b => b.id === bi.benefId);
+    const sl = getScoreLabel(bi.globalScore||0);
+    return `<div class="bilan-row">
+      <div><div class="name">${ben ? ben.prenom+' '+ben.nom : '?'}</div><div class="meta">${bi.date} · <span class="badge n${bi.level}">N${bi.level}</span></div></div>
+      <div class="score-chip" style="color:${sl.color}">${bi.globalScore||0}/100</div>
+    </div>`;
+  }).join('') || '<p style="color:#86A7BC;font-size:0.85rem">Aucun bilan enregistré</p>';
+  document.getElementById('recent-bilans').innerHTML = recentHtml;
+
+  const upcomingHtml = plan.filter(p => new Date(p.date) >= today).sort((a,b) => new Date(a.date)-new Date(b.date)).slice(0,5).map(p => {
+    const ben = benefs.find(b => b.id === p.benefId);
+    const diff = Math.ceil((new Date(p.date)-today)/(1000*60*60*24));
+    return `<div class="bilan-row">
+      <div><div class="name">${ben ? ben.prenom+' '+ben.nom : '?'}</div><div class="meta">${p.date} · <span class="badge n${p.level}">N${p.level}</span></div></div>
+      <span class="badge upcoming">J-${diff}</span>
+    </div>`;
+  }).join('') || '<p style="color:#86A7BC;font-size:0.85rem">Aucun bilan planifié</p>';
+  document.getElementById('upcoming-bilans').innerHTML = upcomingHtml;
+}
+</script>
+
+<script>
+// ============================================================
+// BENEFICIAIRES
+// ============================================================
+function renderBenefList() {
+  const benefs = loadBenefs();
+  const bilans = loadBilans();
+  const q = (document.getElementById('benef-search')?.value || '').toLowerCase();
+  const filtered = benefs.filter(b => (b.prenom+' '+b.nom).toLowerCase().includes(q));
+  const html = filtered.map(ben => {
+    const benBilans = bilans.filter(bi => bi.benefId === ben.id).sort((a,b) => new Date(b.date)-new Date(a.date));
+    const last = benBilans[0];
+    const score = last ? (last.globalScore||0) : null;
+    const sl = score !== null ? getScoreLabel(score) : null;
+    const initials = ben.prenom[0] + ben.nom[0];
+    return `<div class="benef-card" onclick="openFiche('${ben.id}')">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:0.9rem;font-weight:800;color:#fff;flex-shrink:0">${initials}</div>
+        <div>
+          <div class="benef-name">${ben.prenom} ${ben.nom}</div>
+          <div class="benef-info">${ben.age} ans · ${ben.genre === 'M' ? 'Homme' : 'Femme'} · ${ben.club}</div>
+        </div>
+      </div>
+      <div class="benef-stats">
+        ${score !== null ? `<div><div class="score-big" style="color:${sl.color}">${score}</div><div class="score-label">/100 · ${sl.label}</div></div>` : '<div style="color:#86A7BC;font-size:0.8rem">Aucun bilan</div>'}
+        <div style="text-align:right">
+          <span class="badge n${last ? last.level : 1}">N${last ? last.level : '—'}</span>
+          <div style="font-size:0.7rem;color:#86A7BC;margin-top:4px">${last ? last.date : 'Pas de bilan'}</div>
+          <div style="font-size:0.7rem;color:#86A7BC">${benBilans.length} bilan${benBilans.length>1?'s':''}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('') || '<p style="color:#86A7BC">Aucun bénéficiaire trouvé</p>';
+  document.getElementById('benef-grid').innerHTML = html;
+}
+
+function openFiche(benefId) {
+  const ben = loadBenefs().find(b => b.id === benefId);
+  const bilans = loadBilans().filter(bi => bi.benefId === benefId).sort((a,b) => new Date(b.date)-new Date(a.date));
+  document.getElementById('benef-list-view').style.display = 'none';
+  const fiche = document.getElementById('benef-fiche-view');
+  fiche.style.display = 'block';
+
+  const initials = ben.prenom[0] + ben.nom[0];
+  let selectedBilan = bilans[0];
+
+  function renderFicheContent() {
+    const bi = selectedBilan;
+    let detailHtml = '';
+    if (bi) {
+      const inds = getIndicatorsForLevel(bi.level);
+      detailHtml = renderRadarAndIndicators(bi, inds, ben.genre);
+    }
+    document.getElementById('fiche-detail-content').innerHTML = detailHtml || '<p style="color:#86A7BC">Sélectionnez un bilan</p>';
+    document.querySelectorAll('.bh-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.id === (bi?.id||''));
+    });
+  }
+
+  fiche.innerHTML = `
+    <button class="back-btn" onclick="document.getElementById('benef-list-view').style.display='block';document.getElementById('benef-fiche-view').style.display='none';">← Retour</button>
+    <div class="fiche-header">
+      <div class="fiche-avatar">${initials}</div>
+      <div>
+        <div class="fiche-name">${ben.prenom} ${ben.nom}</div>
+        <div class="fiche-meta">${ben.age} ans · ${ben.genre === 'M' ? 'Homme' : 'Femme'} · ${ben.club} · Coach : ${ben.coach}</div>
+      </div>
+    </div>
+    <div class="fiche-body">
+      <div class="card">
+        <div class="section-title">Historique bilans</div>
+        <div class="bilan-history-list">
+          ${bilans.map(bi => {
+            const sl = getScoreLabel(bi.globalScore||0);
+            return `<div class="bh-item" data-id="${bi.id}" onclick="selectBilanInFiche('${bi.id}', '${benefId}')">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div class="bh-date">${bi.date}</div>
+                  <div class="bh-meta"><span class="badge n${bi.level}">N${bi.level}</span> · ${bi.coach}</div>
+                </div>
+                <div style="font-family:var(--font-h);font-size:1rem;font-weight:800;color:${sl.color}">${bi.globalScore||0}</div>
+              </div>
+            </div>`;
+          }).join('') || '<p style="color:#86A7BC;font-size:0.78rem">Aucun bilan</p>'}
+        </div>
+        <button class="btn-add" style="width:100%;margin-top:12px;border-radius:8px;padding:10px;border:none;cursor:pointer;font-family:var(--font-h);font-size:0.8rem;font-weight:700;color:#fff;background:var(--grad)" onclick="startBilanForBenef('${ben.id}')">+ Nouveau bilan</button>
+      </div>
+      <div class="fiche-detail" id="fiche-detail-content"></div>
+    </div>
+  `;
+
+  // store reference for onclick
+  window._ficheData = {ben, bilans};
+  renderFicheContent();
+  document.querySelectorAll('.bh-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === (selectedBilan?.id||''));
+  });
+}
+
+window.selectBilanInFiche = function(bilanId, benefId) {
+  const bi = loadBilans().find(b => b.id === bilanId);
+  const ben = loadBenefs().find(b => b.id === benefId);
+  if (!bi || !ben) return;
+  const inds = getIndicatorsForLevel(bi.level);
+  document.getElementById('fiche-detail-content').innerHTML = renderRadarAndIndicators(bi, inds, ben.genre);
+  document.querySelectorAll('.bh-item').forEach(el => el.classList.toggle('active', el.dataset.id === bilanId));
+};
+
+window.startBilanForBenef = function(benefId) {
+  const ben = loadBenefs().find(b => b.id === benefId);
+  window._prefillBenef = ben;
+  showTab('nouveau-bilan', document.querySelectorAll('.nav-tab')[2]);
+};
+
+function renderRadarAndIndicators(bi, inds, genre) {
+  const scores = bi.scores || calcScores(bi.mesures, genre, bi.level);
+  const globalScore = bi.globalScore || calcGlobalScore(scores);
+  const sl = getScoreLabel(globalScore);
+  const bioAge = calcBioAge(bi.mesures?.age || 35, globalScore);
+
+  const radarSvg = buildRadarSVG(inds, scores, 180);
+
+  const barsHtml = inds.map(ind => {
+    const s = scores[ind.key] ?? 0;
+    const val = bi.mesures?.[ind.key] ?? '—';
+    const target = getTargetValue(ind.key, genre);
+    const cls = s >= 70 ? 'green' : s >= 40 ? 'orange' : 'red';
+    return `<div class="ind-row">
+      <div class="ind-top">
+        <span class="ind-name">${ind.label}</span>
+        <span class="ind-vals">${val}${ind.unit} → cible : ${target}${ind.unit}</span>
+      </div>
+      <div class="ind-bar"><div class="ind-fill ${cls}" style="width:${s}%"></div></div>
+    </div>`;
+  }).join('');
+
+  const recos = buildRecos(scores, bi.mesures, genre, bi.level);
+
+  return `
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start">
+      <div>
+        <div class="gauge-wrap">
+          ${buildGaugeSVG(globalScore, sl.color)}
+          <div class="gauge-score" style="color:${sl.color}">${globalScore}</div>
+          <div class="gauge-label" style="color:${sl.color}">${sl.label}</div>
+        </div>
+        <div class="bio-age-box">
+          <div class="ba-label">Âge biologique</div>
+          <div class="ba-val">${bioAge} ans</div>
+          ${(() => { const d = bioAge - (bi.mesures?.age||35); const cls = d<0?'good':d>3?'bad':'neutral'; const txt = d<0?`${Math.abs(d)} ans de moins que l'âge civil`:d>3?`${d} ans de plus que l'âge civil`:'Dans la norme'; return `<div class="ba-delta ${cls}">${txt}</div>`; })()}
+        </div>
+        <div class="radar-wrap">${radarSvg}</div>
+      </div>
+      <div>
+        <div class="section-title">Indicateurs · Bilan N${bi.level} · ${bi.date}</div>
+        <div class="indicator-list">${barsHtml}</div>
+        <div class="section-title" style="margin-top:20px">Recommandations</div>
+        <div class="reco-sections">
+          <div class="reco-card"><h4>🏃 Entraînement</h4><ul>${recos.entrainement.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+          <div class="reco-card"><h4>🌿 Lifestyle</h4><ul>${recos.lifestyle.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+          <div class="reco-card"><h4>🎯 Objectifs J+90</h4><ul>${recos.objectifs.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SVG HELPERS
+// ============================================================
+function buildGaugeSVG(score, color) {
+  const r = 60, cx = 70, cy = 70, sw = 10;
+  const start = Math.PI, end = 2*Math.PI;
+  const angle = start + (score/100)*(end-start);
+  const x1 = cx + r*Math.cos(start), y1 = cy + r*Math.sin(start);
+  const x2 = cx + r*Math.cos(angle), y2 = cy + r*Math.sin(angle);
+  const large = score > 50 ? 1 : 0;
+  return `<svg width="140" height="80" viewBox="0 0 140 80">
+    <path d="M${cx-r},${cy} A${r},${r} 0 0,1 ${cx+r},${cy}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="${sw}" stroke-linecap="round"/>
+    <path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function buildRadarSVG(inds, scores, size) {
+  if (!inds.length) return '';
+  const n = inds.length;
+  const cx = size/2, cy = size/2, R = size/2 - 24;
+  const angle = i => (Math.PI*2*i/n) - Math.PI/2;
+  const pt = (i, r) => ({x: cx + r*Math.cos(angle(i)), y: cy + r*Math.sin(angle(i))});
+
+  let rings = '';
+  [0.25,0.5,0.75,1].forEach(f => {
+    const pts = inds.map((_,i) => pt(i, R*f));
+    rings += `<polygon points="${pts.map(p=>p.x+','+p.y).join(' ')}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  });
+
+  let axes = inds.map((_,i) => {
+    const p = pt(i, R);
+    return `<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>`;
+  }).join('');
+
+  const dataPts = inds.map((ind, i) => {
+    const s = (scores[ind.key] ?? 0) / 100;
+    return pt(i, R*s);
+  });
+
+  const dataPath = dataPts.map((p,i) => (i===0?'M':'L')+p.x+','+p.y).join(' ')+' Z';
+
+  let labels = inds.map((ind, i) => {
+    const p = pt(i, R + 18);
+    const short = ind.label.length > 10 ? ind.label.split(' ')[0] : ind.label;
+    return `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat,sans-serif" font-size="9" fill="#86A7BC">${short}</text>`;
+  }).join('');
+
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    ${rings}${axes}
+    <path d="${dataPath}" fill="rgba(31,163,244,0.2)" stroke="#1FA3F4" stroke-width="2"/>
+    ${dataPts.map(p => `<circle cx="${p.x}" cy="${p.y}" r="3" fill="#1FA3F4"/>`).join('')}
+    ${labels}
+  </svg>`;
+}
+</script>
+
+<script>
+// ============================================================
+// NOUVEAU BILAN — FORM
+// ============================================================
+let bilanState = {step:1, info:{}, mesures:{}, level:1};
+
+function renderBilanForm() {
+  document.getElementById('bilan-form-wrap').style.display = 'block';
+  document.getElementById('bilan-results-wrap').style.display = 'none';
+  bilanState = {step:1, info:{}, mesures:{}, level:1};
+  if (window._prefillBenef) {
+    bilanState._prefill = window._prefillBenef;
+    window._prefillBenef = null;
+  }
+  renderFormStep();
+}
+
+function renderFormStep() {
+  const steps = [
+    {num:1, label:'Informations'},
+    {num:2, label:'Mesures'},
+    {num:3, label:'Résultats'}
+  ];
+  const stepsHtml = steps.map(s => {
+    const cls = s.num < bilanState.step ? 'done' : s.num === bilanState.step ? 'active' : '';
+    return `<div class="step ${cls}">${s.num < bilanState.step ? '✓' : s.num}. ${s.label}</div>`;
+  }).join('');
+
+  if (bilanState.step === 1) renderStep1(stepsHtml);
+  else if (bilanState.step === 2) renderStep2(stepsHtml);
+}
+
+function renderStep1(stepsHtml) {
+  const pf = bilanState._prefill || {};
+  const coaches = Object.entries(ACCOUNTS).filter(([,v])=>v.role==='coach').map(([k,v])=>`<option value="${k}" ${k===(currentUser?.login||'')?' selected':''}>${v.name}</option>`).join('');
+  document.getElementById('bilan-form-wrap').innerHTML = `
+    <div class="steps">${stepsHtml}</div>
+    <div class="form-card">
+      <h3>Informations du bénéficiaire</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Prénom</label><input id="f-prenom" value="${pf.prenom||''}" placeholder="Prénom"></div>
+        <div class="form-group"><label>Nom</label><input id="f-nom" value="${pf.nom||''}" placeholder="Nom"></div>
+        <div class="form-group"><label>Âge</label><input id="f-age" type="number" min="16" max="99" value="${pf.age||''}" placeholder="Âge"></div>
+        <div class="form-group">
+          <label>Genre</label>
+          <div class="radio-group" style="margin-top:8px">
+            <label class="radio-opt"><input type="radio" name="genre" value="M" ${pf.genre==='M'?'checked':''}> Homme</label>
+            <label class="radio-opt"><input type="radio" name="genre" value="F" ${pf.genre==='F'?'checked':''}> Femme</label>
+          </div>
+        </div>
+        <div class="form-group"><label>Club</label>
+          <select id="f-club">
+            <option value="Paris 7" ${pf.club==='Paris 7'?'selected':''}>Paris 7</option>
+            <option value="La Défense" ${pf.club==='La Défense'?'selected':''}>La Défense</option>
+            <option value="Lyon">Lyon</option>
+            <option value="Bordeaux">Bordeaux</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Coach</label><select id="f-coach">${coaches}</select></div>
+      </div>
+      <div class="section-sep">Niveau de bilan</div>
+      <div class="level-cards">
+        <div class="level-card selected" data-level="1" onclick="selectLevel(1)">
+          <div class="lc-num">N1</div>
+          <div class="lc-name">Basique</div>
+          <div class="lc-desc">Mètre ruban, balance, dynamomètre, chrono. Tour de taille, IMC, Handgrip, Souplesse, Équilibre, Marche 6 min.</div>
+        </div>
+        <div class="level-card" data-level="2" onclick="selectLevel(2)">
+          <div class="lc-num">N2</div>
+          <div class="lc-name">InBody</div>
+          <div class="lc-desc">N1 + analyseur de composition corporelle. Masse grasse, masse musculaire, eau corporelle, métabolisme.</div>
+        </div>
+        <div class="level-card" data-level="3" onclick="selectLevel(3)">
+          <div class="lc-num">N3</div>
+          <div class="lc-name">eGym</div>
+          <div class="lc-desc">N2 + machines eGym fonctionnelles. Mobilité globale, force globale, VO₂ max estimée.</div>
+        </div>
+        <div class="level-card" data-level="4" onclick="selectLevel(4)">
+          <div class="lc-num">N4</div>
+          <div class="lc-name">Complet</div>
+          <div class="lc-desc">N3 + plateforme de force ou capteur. Jump test (hauteur et puissance relative).</div>
+        </div>
+      </div>
+      <div class="form-nav">
+        <div></div>
+        <button class="btn-primary" style="width:auto;padding:10px 28px" onclick="goStep2()">Suivant →</button>
+      </div>
+    </div>`;
+}
+
+function selectLevel(n) {
+  bilanState.level = n;
+  document.querySelectorAll('.level-card').forEach(el => {
+    el.classList.toggle('selected', parseInt(el.dataset.level) === n);
+  });
+}
+
+function goStep2() {
+  const prenom = document.getElementById('f-prenom').value.trim();
+  const nom = document.getElementById('f-nom').value.trim();
+  const age = parseInt(document.getElementById('f-age').value);
+  const genre = document.querySelector('input[name="genre"]:checked')?.value;
+  const club = document.getElementById('f-club').value;
+  const coach = document.getElementById('f-coach').value;
+  if (!prenom || !nom || !age || !genre) {
+    alert('Veuillez remplir tous les champs obligatoires (prénom, nom, âge, genre).');
+    return;
+  }
+  bilanState.info = {prenom, nom, age, genre, club, coach};
+  bilanState.step = 2;
+  renderStep2(null);
+}
+
+function renderStep2(stepsHtml) {
+  const steps = [{num:1,label:'Informations'},{num:2,label:'Mesures'},{num:3,label:'Résultats'}];
+  const sh = steps.map(s => {
+    const cls = s.num < bilanState.step ? 'done' : s.num === bilanState.step ? 'active' : '';
+    return `<div class="step ${cls}">${s.num < bilanState.step ? '✓' : s.num}. ${s.label}</div>`;
+  }).join('');
+
+  const lv = bilanState.level;
+  const H = bilanState.info.genre === 'M';
+
+  let fields = `
+    <div class="section-sep">Mesures de base — N1</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Tour de taille (cm)</label><input id="m-tourTaille" type="number" step="0.1" placeholder="ex: 86"></div>
+      <div class="form-group"><label>Poids (kg)</label><input id="m-poids" type="number" step="0.1" placeholder="ex: 72" oninput="calcIMC()"></div>
+      <div class="form-group"><label>Taille (cm)</label><input id="m-taille" type="number" step="0.1" placeholder="ex: 172" oninput="calcIMC()"></div>
+      <div class="form-group"><label>IMC (auto)</label><input id="m-imc" class="auto-calc" readonly placeholder="calculé auto"></div>
+      <div class="form-group"><label>Handgrip dominant (kg)</label><input id="m-handgrip" type="number" step="0.1" placeholder="${H?'ex: 42':'ex: 28'}" oninput="calcRatioFP()"></div>
+      <div class="form-group"><label>Souplesse / Sit & Reach (cm)</label><input id="m-souplesse" type="number" step="0.1" placeholder="ex: 5 (peut être négatif)"></div>
+      <div class="form-group"><label>Équilibre monopodal (s)</label><input id="m-equilibre" type="number" step="1" placeholder="ex: 25"></div>
+      <div class="form-group"><label>Marche 6 minutes (m)</label><input id="m-marche6" type="number" step="1" placeholder="ex: 480"></div>
+    </div>`;
+
+  if (lv >= 2) {
+    fields += `
+    <div class="section-sep">Composition corporelle — InBody N2</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Masse grasse (%)</label><input id="m-masseGrasse" type="number" step="0.1" placeholder="${H?'ex: 22':'ex: 28'}"></div>
+      <div class="form-group"><label>Masse musculaire (kg)</label><input id="m-masseMusc" type="number" step="0.1" placeholder="${H?'ex: 32':'ex: 22'}"></div>
+      <div class="form-group"><label>Masse maigre (kg)</label><input id="m-masseMaigre" type="number" step="0.1" placeholder="ex: 55"></div>
+      <div class="form-group"><label>Eau corporelle (%)</label><input id="m-eau" type="number" step="0.1" placeholder="${H?'ex: 58':'ex: 53'}"></div>
+      <div class="form-group"><label>Métabolisme basal (kcal)</label><input id="m-metabo" type="number" step="1" placeholder="ex: 1680"></div>
+      <div class="form-group"><label>Ratio force/poids (auto)</label><input id="m-ratioFP" class="auto-calc" readonly placeholder="calculé auto"></div>
+    </div>`;
+  }
+
+  if (lv >= 3) {
+    fields += `
+    <div class="section-sep">Tests fonctionnels — eGym N3</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Mobilité globale eGym (/100)</label><input id="m-mobiliteGym" type="number" min="0" max="100" placeholder="ex: 68"></div>
+      <div class="form-group"><label>Force globale eGym (/100)</label><input id="m-forceGym" type="number" min="0" max="100" placeholder="ex: 72"></div>
+      <div class="form-group"><label>VO₂ max estimée (ml/kg/min)</label><input id="m-vo2max" type="number" step="0.1" placeholder="${H?'ex: 42':'ex: 38'}"></div>
+    </div>`;
+  }
+
+  if (lv >= 4) {
+    fields += `
+    <div class="section-sep">Jump Test — N4</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Jump test — hauteur (cm)</label><input id="m-jumpTest" type="number" step="0.1" placeholder="ex: 38"></div>
+      <div class="form-group"><label>Puissance relative (W/kg)</label><input id="m-puissance" type="number" step="0.1" placeholder="ex: 28.5"></div>
+    </div>`;
+  }
+
+  document.getElementById('bilan-form-wrap').innerHTML = `
+    <div class="steps">${sh}</div>
+    <div class="form-card">
+      <h3>Mesures — Niveau ${lv} · ${bilanState.info.prenom} ${bilanState.info.nom}</h3>
+      ${fields}
+      <div class="form-nav">
+        <button class="btn-secondary" onclick="bilanState.step=1;renderFormStep()">← Retour</button>
+        <button class="btn-primary" style="width:auto;padding:10px 28px" onclick="generateResults()">Générer le profil →</button>
+      </div>
+    </div>`;
+}
+
+function calcIMC() {
+  const p = parseFloat(document.getElementById('m-poids')?.value);
+  const t = parseFloat(document.getElementById('m-taille')?.value);
+  if (p && t) {
+    const imc = (p / ((t/100)**2)).toFixed(1);
+    const el = document.getElementById('m-imc');
+    if (el) el.value = imc;
+  }
+}
+
+function calcRatioFP() {
+  const h = parseFloat(document.getElementById('m-handgrip')?.value);
+  const p = parseFloat(document.getElementById('m-poids')?.value);
+  if (h && p) {
+    const el = document.getElementById('m-ratioFP');
+    if (el) el.value = (h/p).toFixed(2);
+  }
+}
+
+// ============================================================
+// GENERATE RESULTS
+// ============================================================
+function generateResults() {
+  const lv = bilanState.level;
+  const info = bilanState.info;
+
+  const get = id => document.getElementById(id)?.value || '';
+  const mesures = {
+    age: info.age,
+    tourTaille: parseFloat(get('m-tourTaille')),
+    poids: parseFloat(get('m-poids')),
+    taille: parseFloat(get('m-taille')),
+    imc: parseFloat(get('m-imc')),
+    handgrip: parseFloat(get('m-handgrip')),
+    souplesse: parseFloat(get('m-souplesse')),
+    equilibre: parseFloat(get('m-equilibre')),
+    marche6: parseFloat(get('m-marche6'))
+  };
+  if (lv >= 2) {
+    mesures.masseGrasse = parseFloat(get('m-masseGrasse'));
+    mesures.masseMusc = parseFloat(get('m-masseMusc'));
+    mesures.masseMaigre = parseFloat(get('m-masseMaigre'));
+    mesures.eau = parseFloat(get('m-eau'));
+    mesures.metabo = parseFloat(get('m-metabo'));
+  }
+  if (lv >= 3) {
+    mesures.mobiliteGym = parseFloat(get('m-mobiliteGym'));
+    mesures.forceGym = parseFloat(get('m-forceGym'));
+    mesures.vo2max = parseFloat(get('m-vo2max'));
+  }
+  if (lv >= 4) {
+    mesures.jumpTest = parseFloat(get('m-jumpTest'));
+    mesures.puissance = parseFloat(get('m-puissance'));
+  }
+
+  const scores = calcScores(mesures, info.genre, lv);
+  const globalScore = calcGlobalScore(scores);
+  const sl = getScoreLabel(globalScore);
+  const bioAge = calcBioAge(info.age, globalScore);
+  const bioDelta = bioAge - info.age;
+  const bioClass = bioDelta < 0 ? 'good' : bioDelta > 3 ? 'bad' : 'neutral';
+  const bioText = bioDelta < 0 ? `${Math.abs(bioDelta)} ans de moins que l'âge civil` : bioDelta > 3 ? `${bioDelta} ans de plus que l'âge civil` : 'Dans la norme';
+  const inds = getIndicatorsForLevel(lv);
+  const recos = buildRecos(scores, mesures, info.genre, lv);
+
+  // Save bilan
+  const bilanId = 'bi' + Date.now();
+  const benefs = loadBenefs();
+  let benefId = benefs.find(b => b.prenom === info.prenom && b.nom === info.nom)?.id;
+  if (!benefId) {
+    benefId = 'b' + Date.now();
+    benefs.push({id:benefId, prenom:info.prenom, nom:info.nom, age:info.age, genre:info.genre, club:info.club, coach:info.coach});
+    saveBenefs(benefs);
+  }
+  const newBilan = {id:bilanId, benefId, date:new Date().toISOString().split('T')[0], level:lv, mesures, genre:info.genre, coach:info.coach, scores, globalScore};
+  const bilans = loadBilans();
+  bilans.push(newBilan);
+  saveBilans(bilans);
+
+  // Show results
+  document.getElementById('bilan-form-wrap').style.display = 'none';
+  const resWrap = document.getElementById('bilan-results-wrap');
+  resWrap.style.display = 'block';
+
+  const barsHtml = inds.map(ind => {
+    const s = scores[ind.key] ?? 0;
+    const val = mesures[ind.key] ?? '—';
+    const target = getTargetValue(ind.key, info.genre);
+    const cls = s >= 70 ? 'green' : s >= 40 ? 'orange' : 'red';
+    return `<div class="ind-row">
+      <div class="ind-top">
+        <span class="ind-name">${ind.label}</span>
+        <span class="ind-vals">${isNaN(val)?'—':val}${ind.unit} → cible : ${target}${ind.unit} · <strong style="color:${cls==='green'?'#27C191':cls==='orange'?'#ffc107':'#ff6b6b'}">${s}/100</strong></span>
+      </div>
+      <div class="ind-bar"><div class="ind-fill ${cls}" style="width:${s}%"></div></div>
+    </div>`;
+  }).join('');
+
+  const radarSvg = buildRadarSVG(inds, scores, 220);
+
+  resWrap.innerHTML = `
+    <div class="print-header">
+      <h1>Bilan Forme — wellnesstraining</h1>
+      <p>${info.prenom} ${info.nom} · ${info.age} ans · ${info.genre === 'M' ? 'Homme' : 'Femme'} · Coach : ${info.coach} · Date : ${new Date().toLocaleDateString('fr-FR')}</p>
+    </div>
+    <div class="results-header">
+      <h2>Profil de ${info.prenom} ${info.nom}</h2>
+      <div class="pdf-btns">
+        <button class="btn-pdf" onclick="printPDF(false,'${info.prenom} ${info.nom}')">📄 PDF Complet</button>
+        <button class="btn-pdf" onclick="printPDF(true,'${info.prenom} ${info.nom}')">🔒 PDF Anonymisé</button>
+        <button class="btn-secondary" onclick="document.getElementById('bilan-results-wrap').style.display='none';document.getElementById('bilan-form-wrap').style.display='block';renderBilanForm()">Nouveau bilan</button>
+      </div>
+    </div>
+    <div class="results-grid">
+      <div class="results-left">
+        <div class="card">
+          <div class="gauge-wrap">
+            ${buildGaugeSVG(globalScore, sl.color)}
+            <div class="gauge-score" style="color:${sl.color};font-size:3rem">${globalScore}</div>
+            <div style="font-size:0.65rem;color:#86A7BC;margin-top:0">/100</div>
+            <div class="gauge-label" style="color:${sl.color}">${sl.label}</div>
+          </div>
+          <div class="bio-age-box">
+            <div class="ba-label">Âge biologique estimé</div>
+            <div class="ba-val" style="font-size:2.2rem">${bioAge} ans</div>
+            <div class="ba-delta ${bioClass}">${bioText}</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title">Radar des indicateurs</div>
+          <div class="radar-wrap">${radarSvg}</div>
+        </div>
+      </div>
+      <div class="results-right card">
+        <div class="section-title">Indicateurs détaillés — N${lv}</div>
+        <div class="indicator-list">${barsHtml}</div>
+        <div class="section-title" style="margin-top:24px">Recommandations personnalisées</div>
+        <div class="reco-sections">
+          <div class="reco-card"><h4>🏃 Entraînement</h4><ul>${recos.entrainement.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+          <div class="reco-card"><h4>🌿 Hygiène de vie</h4><ul>${recos.lifestyle.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+          <div class="reco-card"><h4>🎯 Objectifs J+90</h4><ul>${recos.objectifs.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function printPDF(anonymize, name) {
+  if (anonymize) {
+    const header = document.querySelector('.results-header h2');
+    const printH = document.querySelector('.print-header p');
+    const original = header.textContent;
+    const anon = 'ID-' + Math.random().toString(36).substr(2,8).toUpperCase();
+    header.textContent = 'Profil ' + anon;
+    if (printH) { const op = printH.textContent; printH.textContent = anon + ' · ' + printH.textContent.split('·').slice(1).join('·'); setTimeout(()=>printH.textContent=op,3000); }
+    setTimeout(()=>header.textContent=original, 3000);
+    window.print();
+  } else {
+    window.print();
+  }
+}
+</script>
+
+<script>
+// ============================================================
+// PLANIFICATEUR
+// ============================================================
+let planFilter = 'all';
+
+function setPlanFilter(f, el) {
+  planFilter = f;
+  document.querySelectorAll('.plan-filter').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  renderPlanificateur();
+}
+
+function renderPlanificateur() {
+  const plan = loadPlan();
+  const benefs = loadBenefs();
+  const today = new Date();
+  const weekEnd = new Date(today); weekEnd.setDate(today.getDate()+7);
+
+  let filtered = plan;
+  if (planFilter === 'overdue') filtered = plan.filter(p => new Date(p.date) < today && p.status !== 'done');
+  else if (planFilter === 'week') filtered = plan.filter(p => { const d=new Date(p.date); return d>=today && d<=weekEnd; });
+  else if (planFilter === 'upcoming') filtered = plan.filter(p => new Date(p.date) >= today && p.status !== 'done');
+
+  filtered.sort((a,b) => new Date(a.date)-new Date(b.date));
+
+  const html = filtered.map(p => {
+    const ben = benefs.find(b => b.id === p.benefId);
+    const name = ben ? ben.prenom+' '+ben.nom : '?';
+    const d = new Date(p.date);
+    const overdue = d < today && p.status !== 'done';
+    const diff = Math.ceil((d-today)/(1000*60*60*24));
+    const statusBadge = overdue ? `<span class="badge overdue">⚠ En retard (${Math.abs(diff)}j)</span>` :
+      diff <= 7 ? `<span class="badge upcoming">Cette semaine</span>` :
+      `<span class="badge ok">J-${diff}</span>`;
+    return `<div class="plan-row ${overdue?'overdue':''}">
+      <div>
+        <div class="plan-name">${name}</div>
+        <div class="plan-meta">${p.date} · <span class="badge n${p.level}">N${p.level}</span> · Coach : ${p.coach}</div>
+      </div>
+      <div class="plan-actions">
+        ${statusBadge}
+        <button class="btn-small" onclick="startBilanFromPlan('${p.id}')">Saisir le bilan</button>
+        <button class="btn-small" onclick="deletePlan('${p.id}')">Supprimer</button>
+      </div>
+    </div>`;
+  }).join('') || '<p style="color:#86A7BC;padding:20px 0">Aucun bilan dans cette catégorie</p>';
+
+  document.getElementById('plan-list').innerHTML = html;
+}
+
+window.startBilanFromPlan = function(planId) {
+  const plan = loadPlan();
+  const p = plan.find(x => x.id === planId);
+  if (!p) return;
+  const ben = loadBenefs().find(b => b.id === p.benefId);
+  if (ben) { window._prefillBenef = ben; bilanState.level = p.level; }
+  showTab('nouveau-bilan', document.querySelectorAll('.nav-tab')[2]);
+};
+
+window.deletePlan = function(planId) {
+  if (!confirm('Supprimer ce bilan planifié ?')) return;
+  const plan = loadPlan().filter(p => p.id !== planId);
+  savePlan(plan);
+  renderPlanificateur();
+};
+
+function showScheduleModal() {
+  const benefs = loadBenefs();
+  const select = document.getElementById('plan-benef');
+  select.innerHTML = benefs.map(b => `<option value="${b.id}">${b.prenom} ${b.nom}</option>`).join('');
+  const today = new Date();
+  const d90 = new Date(today); d90.setDate(today.getDate()+90);
+  document.getElementById('plan-date').value = d90.toISOString().split('T')[0];
+  document.getElementById('schedule-modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('schedule-modal').style.display = 'none';
+}
+
+function saveSchedule() {
+  const benefId = document.getElementById('plan-benef').value;
+  const date = document.getElementById('plan-date').value;
+  const level = parseInt(document.getElementById('plan-level').value);
+  if (!benefId || !date) return;
+  const plan = loadPlan();
+  plan.push({id:'p'+Date.now(), benefId, date, level, coach:currentUser?.login||'', status:'upcoming'});
+  savePlan(plan);
+  closeModal();
+  renderPlanificateur();
+}
+
+// Close modal on backdrop click
+document.getElementById('schedule-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ============================================================
+// INIT
+// ============================================================
+initDemoData();
+</script>
+</body>
+</html>
