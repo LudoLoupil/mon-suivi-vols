@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - claude/setup-pt-br-localization-OXSrR
   workflow_dispatch:
 
 permissions:
