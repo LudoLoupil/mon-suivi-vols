@@ -1,9 +1,9 @@
-# mon-suivi-vols
+# apprendre-portugais-bresil
 
 Suivi des prix de vols **Paris → Hurghada**, version web localisée en
 **portugais du Brésil (pt-BR)** — application Vite + React.
 
-🔗 **En ligne :** https://ludoloupil.github.io/mon-suivi-vols/
+🔗 **En ligne :** https://ludoloupil.github.io/apprendre-portugais-bresil/
 
 Le composant livrable se trouve à la racine dans `portugais-brasil.jsx`
 (copie identique de `src/App.jsx`).
