@@ -3,7 +3,7 @@ name: Deploy pt-BR app to GitHub Pages
 on:
   push:
     branches:
-      - claude/setup-pt-br-localization-OXSrR
+      - main
   workflow_dispatch:
 
 permissions:
