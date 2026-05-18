@@ -1,0 +1,169 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --bg: #0e1117;
+  --panel: #1a1f2b;
+  --border: #2a3142;
+  --text: #e6e8eb;
+  --muted: #9aa3b2;
+  --accent: #4f8cff;
+  --good: #1f9d55;
+  --bad: #e0405e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1.25rem;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  max-width: 900px;
+}
+
+h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.25rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 2rem 0 0.75rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 1rem 0 0.35rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.caption {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  word-break: break-word;
+}
+
+.metrics {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.metric {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  flex: 1;
+}
+
+.metric .metric-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.metric .metric-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.metric .metric-delta {
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.delta-good {
+  color: var(--good);
+}
+
+.delta-bad {
+  color: var(--bad);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.banner {
+  margin-top: 1.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.banner-success {
+  background: rgba(31, 157, 85, 0.15);
+  border: 1px solid var(--good);
+}
+
+.banner-info {
+  background: rgba(79, 140, 255, 0.12);
+  border: 1px solid var(--accent);
+}
+
+.chart {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
