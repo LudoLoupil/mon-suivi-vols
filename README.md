@@ -1,37 +1,31 @@
-# mon-suivi-vols
+# apprendre-portugais-bresil
 
-Suivi des prix de vols **Paris → Hurghada**, version web localisée en
-**portugais du Brésil (pt-BR)** — application Vite + React.
+Petite application web pour **apprendre le portugais du Brésil** :
+vocabulaire par thèmes (cartes mémo), quiz à choix multiples et phrases
+essentielles, avec prononciation à l'écrit et audio. Application Vite +
+React, **100 % hors-ligne** : aucune clé API, aucun compte, aucune
+connexion requise.
 
-🔗 **En ligne :** https://ludoloupil.github.io/mon-suivi-vols/
+🔗 **Tester tout de suite (sans rien installer) :**
+https://stackblitz.com/github/LudoLoupil/apprendre-portugais-bresil
 
-Le composant livrable se trouve à la racine dans `portugais-brasil.jsx`
-(copie identique de `src/App.jsx`).
+## Contenu
+
+- **Cartes** — vocabulaire FR → PT-BR par catégories (salutations,
+  nombres, voyage, restaurant, au quotidien). Touche une carte pour la
+  retourner.
+- **Quiz** — retrouve la bonne traduction parmi 4 propositions, avec score.
+- **Phrases** — expressions essentielles pour voyager / discuter.
+- Bouton 🔊 : prononciation via la synthèse vocale du navigateur.
 
 ## Installation et lancement (local)
 
 ```bash
 npm install
-cp .env.local.example .env.local   # à la racine du projet
-# Renseigne ta clé dans .env.local (VITE_SERPAPI_API_KEY) si besoin, puis :
 npm run dev
 ```
 
-L'app fonctionne **sans clé API** : elle affiche des données simulées. La
-clé SerpApi est optionnelle.
+Puis ouvre l'URL indiquée par Vite (par défaut http://localhost:5173/).
 
-## Variables d'environnement (`.env.local`)
-
-Les variables doivent être préfixées par `VITE_` pour être exposées au
-navigateur (voir `.env.local.example`) :
-
-- `VITE_SERPAPI_API_KEY` — clé SerpApi pour récupérer des prix réels. Vide,
-  l'app utilise des données simulées. Attention : un appel direct depuis le
-  navigateur peut échouer (CORS) ; en production, passez par un proxy/backend.
-- `VITE_DEFAULT_MODEL` — modèle par défaut affiché dans l'UI (`gpt-5-mini`).
-
-## Déploiement
-
-Le site est publié via **GitHub Pages** par le workflow
-`.github/workflows/deploy.yml`. Toute modification fusionnée dans `main`
-redéploie automatiquement le site (~1-2 min).
+Build de production : `npm run build` (sortie dans `dist/`, chemins
+relatifs : déployable tel quel sur n'importe quel hébergeur statique).
